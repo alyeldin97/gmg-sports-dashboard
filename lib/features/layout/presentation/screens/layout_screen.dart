@@ -1,0 +1,160 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/di/dependency_injection.dart';
+import '../../../../core/localization/l10n_extension.dart';
+import '../../../../core/localization/locale_cubit.dart';
+import '../../../../core/navigation/navigation_cubit.dart';
+import '../../../../core/styling/colors.dart';
+import '../../../../core/styling/text_styles.dart';
+import '../../../auth/presentation/cubits/auth_cubit.dart';
+import '../../../banners/presentation/screens/banners_mgmt_screen.dart';
+import '../../../collections/presentation/screens/collections_mgmt_screen.dart';
+import '../../../dashboard_home/presentation/dashboard_home_screen.dart';
+import '../../../orders/presentation/screens/orders_screen.dart';
+import '../../../products/presentation/screens/products_mgmt_screen.dart';
+import '../../../settings/presentation/screens/settings_screen.dart';
+
+class LayoutScreen extends StatelessWidget {
+  static const String routeName = '/layout';
+  const LayoutScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final di = DependencyInjector();
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => di.productsCubit..load()),
+        BlocProvider(create: (_) => di.collectionsCubit..load()),
+        BlocProvider(create: (_) => di.bannersCubit..load()),
+        BlocProvider(create: (_) => di.ordersCubit..load()),
+        BlocProvider(create: (_) => di.settingsCubit..load()),
+      ],
+      child: const _LayoutView(),
+    );
+  }
+}
+
+class _NavDest {
+  const _NavDest(this.icon, this.label);
+  final IconData icon;
+  final String label;
+}
+
+class _LayoutView extends StatelessWidget {
+  const _LayoutView();
+
+  @override
+  Widget build(BuildContext context) {
+    const screens = [
+      DashboardHomeScreen(),
+      ProductsMgmtScreen(),
+      CollectionsMgmtScreen(),
+      BannersMgmtScreen(),
+      OrdersScreen(),
+      SettingsScreen(),
+    ];
+    final dests = [
+      _NavDest(Icons.dashboard_outlined, context.l10n.navDashboard),
+      _NavDest(Icons.inventory_2_outlined, context.l10n.navProducts),
+      _NavDest(Icons.grid_view_outlined, context.l10n.navCollections),
+      _NavDest(Icons.image_outlined, context.l10n.navBanners),
+      _NavDest(Icons.receipt_long_outlined, context.l10n.navOrders),
+      _NavDest(Icons.settings_outlined, context.l10n.navSettings),
+    ];
+
+    return BlocBuilder<NavigationCubit, int>(
+      builder: (context, index) {
+        return Scaffold(
+          backgroundColor: AppColors.scaffoldBg,
+          body: Row(
+            children: [
+              _SideNav(dests: dests, index: index),
+              Expanded(child: screens[index]),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _SideNav extends StatelessWidget {
+  const _SideNav({required this.dests, required this.index});
+  final List<_NavDest> dests;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 240,
+      color: AppColors.ink,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 28, 20, 20),
+            child: Image.asset('assets/images/logo.png', height: 56),
+          ),
+          const SizedBox(height: 8),
+          Expanded(
+            child: ListView.builder(
+              itemCount: dests.length,
+              itemBuilder: (context, i) {
+                final selected = i == index;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+                  child: Material(
+                    color: selected ? AppColors.primary : Colors.transparent,
+                    borderRadius: BorderRadius.circular(10),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(10),
+                      onTap: () => context.read<NavigationCubit>().navigateTo(i),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                        child: Row(
+                          children: [
+                            Icon(dests[i].icon,
+                                size: 20, color: selected ? AppColors.ink : AppColors.primaryLight),
+                            const SizedBox(width: 12),
+                            Text(
+                              dests[i].label,
+                              style: AppTextStyles.subtitle.copyWith(
+                                color: selected ? AppColors.ink : AppColors.white,
+                                fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          const Divider(color: Colors.white24, height: 1),
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              children: [
+                TextButton.icon(
+                  onPressed: () => context.read<LocaleCubit>().toggle(),
+                  icon: const Icon(Icons.language, color: AppColors.primaryLight, size: 18),
+                  label: Text(
+                    context.read<LocaleCubit>().isArabic ? context.l10n.english : context.l10n.arabic,
+                    style: AppTextStyles.label.copyWith(color: AppColors.white),
+                  ),
+                ),
+                TextButton.icon(
+                  onPressed: () => context.read<AuthCubit>().signOut(),
+                  icon: const Icon(Icons.logout, color: AppColors.error, size: 18),
+                  label: Text(context.l10n.logout, style: AppTextStyles.label.copyWith(color: AppColors.white)),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -1,0 +1,300 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Arabic (`ar`).
+class AppLocalizationsAr extends AppLocalizations {
+  AppLocalizationsAr([String locale = 'ar']) : super(locale);
+
+  @override
+  String get appName => 'لوحة تحكم جي إم جي';
+
+  @override
+  String get loading => 'جارٍ التحميل…';
+
+  @override
+  String get retry => 'إعادة المحاولة';
+
+  @override
+  String get save => 'حفظ';
+
+  @override
+  String get cancel => 'إلغاء';
+
+  @override
+  String get delete => 'حذف';
+
+  @override
+  String get edit => 'تعديل';
+
+  @override
+  String get add => 'إضافة';
+
+  @override
+  String get create => 'إنشاء';
+
+  @override
+  String get search => 'بحث';
+
+  @override
+  String get somethingWrong => 'حدث خطأ ما';
+
+  @override
+  String get requiredField => 'مطلوب';
+
+  @override
+  String get currency => 'ج.م';
+
+  @override
+  String get active => 'نشط';
+
+  @override
+  String get inactive => 'غير نشط';
+
+  @override
+  String get yes => 'نعم';
+
+  @override
+  String get no => 'لا';
+
+  @override
+  String get confirmDelete => 'حذف؟';
+
+  @override
+  String get deleteMessage => 'لا يمكن التراجع عن هذا الإجراء.';
+
+  @override
+  String get signIn => 'تسجيل الدخول';
+
+  @override
+  String get email => 'البريد الإلكتروني';
+
+  @override
+  String get password => 'كلمة المرور';
+
+  @override
+  String get adminLogin => 'دخول المسؤول';
+
+  @override
+  String get adminLoginSubtitle => 'سجّل الدخول لإدارة متجرك';
+
+  @override
+  String get accessDenied => 'تم الرفض — هذا الحساب ليس مسؤولاً.';
+
+  @override
+  String get logout => 'تسجيل الخروج';
+
+  @override
+  String get navDashboard => 'الرئيسية';
+
+  @override
+  String get navProducts => 'المنتجات';
+
+  @override
+  String get navCollections => 'المجموعات';
+
+  @override
+  String get navBanners => 'اللافتات';
+
+  @override
+  String get navOrders => 'الطلبات';
+
+  @override
+  String get navSettings => 'الإعدادات';
+
+  @override
+  String get overview => 'نظرة عامة';
+
+  @override
+  String get totalOrders => 'إجمالي الطلبات';
+
+  @override
+  String get pendingOrders => 'طلبات قيد الانتظار';
+
+  @override
+  String get revenue => 'الإيرادات';
+
+  @override
+  String get totalProducts => 'المنتجات';
+
+  @override
+  String get recentOrders => 'أحدث الطلبات';
+
+  @override
+  String get name => 'الاسم';
+
+  @override
+  String get nameAr => 'الاسم (عربي)';
+
+  @override
+  String get title => 'العنوان';
+
+  @override
+  String get titleAr => 'العنوان (عربي)';
+
+  @override
+  String get description => 'الوصف';
+
+  @override
+  String get descriptionAr => 'الوصف (عربي)';
+
+  @override
+  String get price => 'السعر';
+
+  @override
+  String get compareAtPrice => 'السعر قبل الخصم';
+
+  @override
+  String get stock => 'المخزون';
+
+  @override
+  String get featured => 'مميز';
+
+  @override
+  String get imageUrls => 'روابط الصور (رابط بكل سطر)';
+
+  @override
+  String get imageUrl => 'رابط الصورة';
+
+  @override
+  String get sortOrder => 'الترتيب';
+
+  @override
+  String get variants => 'المتغيرات';
+
+  @override
+  String get addVariant => 'إضافة متغير';
+
+  @override
+  String get variantName => 'اسم المتغير';
+
+  @override
+  String get collectionsLabel => 'المجموعات';
+
+  @override
+  String get noProducts => 'لا توجد منتجات بعد';
+
+  @override
+  String get newProduct => 'منتج جديد';
+
+  @override
+  String get editProduct => 'تعديل المنتج';
+
+  @override
+  String get noCollections => 'لا توجد مجموعات بعد';
+
+  @override
+  String get newCollection => 'مجموعة جديدة';
+
+  @override
+  String get editCollection => 'تعديل المجموعة';
+
+  @override
+  String get noBanners => 'لا توجد لافتات بعد';
+
+  @override
+  String get newBanner => 'لافتة جديدة';
+
+  @override
+  String get editBanner => 'تعديل اللافتة';
+
+  @override
+  String get linkType => 'نوع الرابط';
+
+  @override
+  String get linkNone => 'بدون';
+
+  @override
+  String get linkCollection => 'مجموعة';
+
+  @override
+  String get linkProduct => 'منتج';
+
+  @override
+  String get linkTargetId => 'معرّف الهدف';
+
+  @override
+  String get customerOrders => 'طلبات العملاء';
+
+  @override
+  String get noOrders => 'لا توجد طلبات بعد';
+
+  @override
+  String get orderDetails => 'تفاصيل الطلب';
+
+  @override
+  String orderNumber(Object id) {
+    return 'طلب رقم #$id';
+  }
+
+  @override
+  String get updateStatus => 'تحديث الحالة';
+
+  @override
+  String get recipient => 'المستلم';
+
+  @override
+  String get deliveryAddress => 'عنوان التوصيل';
+
+  @override
+  String get deliveryDate => 'تاريخ التوصيل';
+
+  @override
+  String get paymentMethod => 'طريقة الدفع';
+
+  @override
+  String get cod => 'الدفع عند الاستلام';
+
+  @override
+  String get instapay => 'إنستاباي عند الاستلام';
+
+  @override
+  String get items => 'العناصر';
+
+  @override
+  String get subtotal => 'المجموع الفرعي';
+
+  @override
+  String get deliveryFee => 'رسوم التوصيل';
+
+  @override
+  String get total => 'الإجمالي';
+
+  @override
+  String get statusPending => 'قيد الانتظار';
+
+  @override
+  String get statusConfirmed => 'مؤكد';
+
+  @override
+  String get statusProcessing => 'قيد التجهيز';
+
+  @override
+  String get statusOutForDelivery => 'في الطريق';
+
+  @override
+  String get statusDelivered => 'تم التوصيل';
+
+  @override
+  String get statusCancelled => 'ملغي';
+
+  @override
+  String get freeDeliveryThreshold => 'حد التوصيل المجاني';
+
+  @override
+  String get instapayHandle => 'معرّف إنستاباي';
+
+  @override
+  String get settingsSaved => 'تم حفظ الإعدادات';
+
+  @override
+  String get language => 'اللغة';
+
+  @override
+  String get arabic => 'العربية';
+
+  @override
+  String get english => 'English';
+}
