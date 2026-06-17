@@ -4,7 +4,7 @@ import 'features/layout/presentation/screens/layout_screen.dart';
 import 'features/splash/presentation/splash_screen.dart';
 
 class RouteGenerator {
-  static const String initialRoute = SplashScreen.routeName;
+  static const String initialRoute = LoginScreen.routeName;
 
   static Route<dynamic> getRoute(RouteSettings settings) {
     switch (settings.name) {
