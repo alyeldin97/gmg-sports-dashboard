@@ -1,3 +1,5 @@
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -28,6 +30,34 @@ class _OrdersScreenState extends State<OrdersScreen> {
   void dispose() {
     _searchCtrl.dispose();
     super.dispose();
+  }
+
+  void _exportCsv(List<Order> orders) {
+    final buf = StringBuffer();
+    buf.writeln('Order ID,Recipient,Phone,Address,Date,Delivery Date,Status,Payment,Subtotal,Shipping,Total,Notes');
+    for (final o in orders) {
+      final row = [
+        o.shortId,
+        o.recipientName,
+        o.recipientPhone,
+        '"${o.addressText.replaceAll('"', '""')}"',
+        DateFormat('yyyy-MM-dd').format(o.createdAt),
+        o.deliveryDate != null ? DateFormat('yyyy-MM-dd').format(o.deliveryDate!) : '',
+        o.status.dbValue,
+        o.isCod ? 'COD' : 'InstaPay',
+        o.subtotal.toStringAsFixed(2),
+        o.deliveryFee.toStringAsFixed(2),
+        o.total.toStringAsFixed(2),
+        '"${(o.notes ?? '').replaceAll('"', '""')}"',
+      ];
+      buf.writeln(row.join(','));
+    }
+    final blob = html.Blob([buf.toString()], 'text/csv;charset=utf-8');
+    final url = html.Url.createObjectUrlFromBlob(blob);
+    html.AnchorElement(href: url)
+      ..setAttribute('download', 'orders_${DateFormat('yyyyMMdd_HHmm').format(DateTime.now())}.csv')
+      ..click();
+    html.Url.revokeObjectUrl(url);
   }
 
   List<Order> _filter(List<Order> orders) {
@@ -91,6 +121,20 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   DropdownMenuItem(value: _SortMode.oldest, child: Text(context.l10n.oldestFirst)),
                 ],
                 onChanged: (v) => setState(() => _sort = v ?? _SortMode.newest),
+              ),
+              const SizedBox(width: 12),
+              BlocBuilder<OrdersCubit, OrdersState>(
+                builder: (context, state) => OutlinedButton.icon(
+                  icon: const Icon(Icons.download_rounded, size: 18),
+                  label: Text(context.l10n.exportCsv),
+                  onPressed: state.orders.isEmpty
+                      ? null
+                      : () => _exportCsv(_filter(state.orders)),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                    side: const BorderSide(color: AppColors.border),
+                  ),
+                ),
               ),
             ],
           ),
@@ -162,6 +206,27 @@ class _OrderRow extends StatelessWidget {
             Expanded(flex: 2, child: Text(order.recipientName, style: AppTextStyles.body)),
             Expanded(flex: 2, child: Text(order.recipientPhone, style: AppTextStyles.bodySmall)),
             Expanded(child: Text(DateFormat('d MMM').format(order.createdAt), style: AppTextStyles.bodySmall)),
+            SizedBox(
+              width: 80,
+              child: Row(
+                children: [
+                  Icon(
+                    order.isCod ? Icons.payments_outlined : Icons.account_balance_wallet_outlined,
+                    size: 14,
+                    color: AppColors.textLight,
+                  ),
+                  const SizedBox(width: 4),
+                  Flexible(
+                    child: Text(
+                      order.isCod ? context.l10n.cod : 'InstaPay',
+                      style: AppTextStyles.bodySmall,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
               decoration: BoxDecoration(

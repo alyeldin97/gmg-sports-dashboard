@@ -386,4 +386,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noGovernorates => 'No governorates yet';
+
+  @override
+  String get orderNotes => 'Order Notes';
+
+  @override
+  String get duplicateProduct => 'Duplicate';
+
+  @override
+  String get productDuplicated => 'Product duplicated';
+
+  @override
+  String get exportCsv => 'Export CSV';
+
+  @override
+  String get lowStockAlert => 'Low Stock';
+
+  @override
+  String get lowStockThreshold => 'Low stock threshold';
 }

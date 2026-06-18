@@ -703,6 +703,12 @@ abstract class AppLocalizations {
   String get newGovernorate;
   String get editGovernorate;
   String get noGovernorates;
+  String get orderNotes;
+  String get duplicateProduct;
+  String get productDuplicated;
+  String get exportCsv;
+  String get lowStockAlert;
+  String get lowStockThreshold;
 }
 
 class _AppLocalizationsDelegate

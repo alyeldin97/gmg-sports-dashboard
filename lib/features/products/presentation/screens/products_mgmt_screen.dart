@@ -375,6 +375,19 @@ class _ProductRow extends StatelessWidget {
                 }
               },
             ),
+            IconButton(
+              icon: const Icon(Icons.copy_outlined, size: 18),
+              tooltip: context.l10n.duplicateProduct,
+              onPressed: () async {
+                final cubit = context.read<ProductsCubit>();
+                final ok = await cubit.duplicate(product);
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(ok ? context.l10n.productDuplicated : context.l10n.failedToUpdate),
+                  ));
+                }
+              },
+            ),
             IconButton(icon: const Icon(Icons.edit_outlined, size: 18), onPressed: onEdit),
             IconButton(
               icon: const Icon(Icons.delete_outline, size: 18, color: AppColors.error),

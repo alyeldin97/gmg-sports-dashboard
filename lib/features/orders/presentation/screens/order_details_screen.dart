@@ -76,6 +76,21 @@ class OrderDetailsScreen extends StatelessWidget {
                               ),
                           ],
                         ),
+                        if (order.notes != null && order.notes!.isNotEmpty) ...[
+                          const SizedBox(height: 10),
+                          Text(context.l10n.orderNotes, style: AppTextStyles.subtitle),
+                          const SizedBox(height: 4),
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: AppColors.scaffoldBg,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: AppColors.border),
+                            ),
+                            child: Text(order.notes!, style: AppTextStyles.body),
+                          ),
+                        ],
                       ],
                     ),
                   ),

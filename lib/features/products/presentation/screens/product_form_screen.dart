@@ -135,7 +135,20 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                   AppTextField(label: context.l10n.stock, controller: _stock, keyboardType: TextInputType.number, validator: AppValidator.optionalNumber),
                 ]),
                 const SizedBox(height: 16),
-                AppTextField(label: context.l10n.imageUrls, controller: _images, maxLines: 3, hint: 'https://…'),
+                AppTextField(
+                  label: context.l10n.imageUrls,
+                  controller: _images,
+                  maxLines: 3,
+                  hint: 'https://…',
+                  validator: (v) {
+                    final lines = (v ?? '').split('\n').map((e) => e.trim()).where((e) => e.isNotEmpty);
+                    for (final line in lines) {
+                      final err = AppValidator.url(line);
+                      if (err != null) return err;
+                    }
+                    return null;
+                  },
+                ),
                 const SizedBox(height: 16),
                 Row(
                   children: [

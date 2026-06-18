@@ -66,6 +66,32 @@ class ProductsCubit extends Cubit<ProductsState> {
     }
   }
 
+  Future<bool> duplicate(Product product) async {
+    try {
+      final newProduct = Product(
+        id: '',
+        name: '${product.name} (Copy)',
+        nameAr: product.nameAr != null ? '${product.nameAr} (نسخة)' : null,
+        description: product.description,
+        descriptionAr: product.descriptionAr,
+        price: product.price,
+        compareAtPrice: product.compareAtPrice,
+        images: product.images,
+        stock: product.stock,
+        isActive: false,
+        isFeatured: false,
+        collectionIds: product.collectionIds,
+        variants: [],
+      );
+      await _repository.saveProduct(newProduct);
+      await load();
+      return true;
+    } catch (e) {
+      emit(state.copyWith(status: ProductsStatus.failure, errorMessage: e.toString()));
+      return false;
+    }
+  }
+
   Future<bool> bulkToggleActive(List<String> ids, bool active) async {
     try {
       for (final id in ids) {

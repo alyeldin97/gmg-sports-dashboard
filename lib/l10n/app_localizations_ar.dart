@@ -385,4 +385,22 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noGovernorates => 'لا توجد محافظات بعد';
+
+  @override
+  String get orderNotes => 'ملاحظات الطلب';
+
+  @override
+  String get duplicateProduct => 'نسخ';
+
+  @override
+  String get productDuplicated => 'تم نسخ المنتج';
+
+  @override
+  String get exportCsv => 'تصدير CSV';
+
+  @override
+  String get lowStockAlert => 'مخزون منخفض';
+
+  @override
+  String get lowStockThreshold => 'حد المخزون المنخفض';
 }
