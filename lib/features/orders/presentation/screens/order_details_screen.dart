@@ -54,6 +54,10 @@ class OrderDetailsScreen extends StatelessWidget {
                         Text(context.l10n.recipient, style: AppTextStyles.subtitle),
                         const SizedBox(height: 4),
                         Text('${order.recipientName} · ${order.recipientPhone}', style: AppTextStyles.body),
+                        if (order.guestEmail != null && order.guestEmail!.isNotEmpty) ...[
+                          const SizedBox(height: 2),
+                          Text(order.guestEmail!, style: AppTextStyles.bodySmall.copyWith(color: AppColors.textLight)),
+                        ],
                         const SizedBox(height: 10),
                         Text(context.l10n.deliveryAddress, style: AppTextStyles.subtitle),
                         const SizedBox(height: 4),

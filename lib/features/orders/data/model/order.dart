@@ -83,6 +83,7 @@ class Order extends Equatable {
   final String recipientPhone;
   final String addressText;
   final String? notes;
+  final String? guestEmail;
   final DateTime createdAt;
   final List<OrderItem> items;
 
@@ -98,6 +99,7 @@ class Order extends Equatable {
     required this.recipientPhone,
     required this.addressText,
     this.notes,
+    this.guestEmail,
     required this.createdAt,
     this.items = const [],
   });
@@ -117,6 +119,7 @@ class Order extends Equatable {
         recipientPhone: j['recipient_phone'] as String? ?? '',
         addressText: j['address_text'] as String? ?? '',
         notes: j['notes'] as String?,
+        guestEmail: j['guest_email'] as String?,
         createdAt: DateTime.parse(j['created_at'] as String),
         items: (j['order_items'] as List<dynamic>? ?? [])
             .map((e) => OrderItem.fromJson(e as Map<String, dynamic>))
