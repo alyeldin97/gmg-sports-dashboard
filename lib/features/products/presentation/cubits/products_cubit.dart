@@ -31,13 +31,51 @@ class ProductsCubit extends Cubit<ProductsState> {
     }
   }
 
-  Future<void> delete(String id) async {
-    await _repository.deleteProduct(id);
-    await load();
+  Future<bool> delete(String id) async {
+    try {
+      await _repository.deleteProduct(id);
+      await load();
+      return true;
+    } catch (e) {
+      emit(state.copyWith(status: ProductsStatus.failure, errorMessage: e.toString()));
+      return false;
+    }
   }
 
-  Future<void> toggleActive(Product p) async {
-    await _repository.setActive(p.id, !p.isActive);
-    await load();
+  Future<bool> toggleActive(Product p) async {
+    try {
+      await _repository.setActive(p.id, !p.isActive);
+      await load();
+      return true;
+    } catch (e) {
+      emit(state.copyWith(status: ProductsStatus.failure, errorMessage: e.toString()));
+      return false;
+    }
+  }
+
+  Future<bool> bulkDelete(List<String> ids) async {
+    try {
+      for (final id in ids) {
+        await _repository.deleteProduct(id);
+      }
+      await load();
+      return true;
+    } catch (e) {
+      emit(state.copyWith(status: ProductsStatus.failure, errorMessage: e.toString()));
+      return false;
+    }
+  }
+
+  Future<bool> bulkToggleActive(List<String> ids, bool active) async {
+    try {
+      for (final id in ids) {
+        await _repository.setActive(id, active);
+      }
+      await load();
+      return true;
+    } catch (e) {
+      emit(state.copyWith(status: ProductsStatus.failure, errorMessage: e.toString()));
+      return false;
+    }
   }
 }

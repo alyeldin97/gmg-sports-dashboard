@@ -12,6 +12,7 @@ class AppTextField extends StatelessWidget {
     this.obscure = false,
     this.maxLines = 1,
     this.hint,
+    this.onChanged,
   });
 
   final String label;
@@ -21,6 +22,7 @@ class AppTextField extends StatelessWidget {
   final bool obscure;
   final int maxLines;
   final String? hint;
+  final ValueChanged<String>? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,7 @@ class AppTextField extends StatelessWidget {
           keyboardType: keyboardType,
           obscureText: obscure,
           maxLines: obscure ? 1 : maxLines,
+          onChanged: onChanged,
           style: AppTextStyles.body,
           decoration: InputDecoration(
             isDense: true,

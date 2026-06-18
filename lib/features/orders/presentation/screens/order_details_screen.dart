@@ -137,6 +137,32 @@ class _StatusDropdown extends StatelessWidget {
   const _StatusDropdown({required this.order});
   final Order order;
 
+  void _confirmChange(BuildContext context, OrderStatus newStatus) {
+    final cubit = context.read<OrdersCubit>();
+    showDialog(
+      context: context,
+      builder: (dialogCtx) => AlertDialog(
+        title: const Text('Update Status'),
+        content: Text('Change status to "${newStatus.localizedLabel(context)}"?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(dialogCtx), child: const Text('Cancel')),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(dialogCtx);
+              final ok = await cubit.updateStatus(order, newStatus);
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(ok ? 'Status updated' : 'Failed to update status'),
+                ));
+              }
+            },
+            child: const Text('Confirm'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -158,7 +184,7 @@ class _StatusDropdown extends StatelessWidget {
               .toList(),
           onChanged: (s) {
             if (s != null && s != order.status) {
-              context.read<OrdersCubit>().updateStatus(order, s);
+              _confirmChange(context, s);
             }
           },
         ),

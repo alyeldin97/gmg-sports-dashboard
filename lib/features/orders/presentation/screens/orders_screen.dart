@@ -10,8 +10,40 @@ import '../../data/model/order.dart';
 import '../cubits/orders_cubit.dart';
 import 'order_details_screen.dart';
 
-class OrdersScreen extends StatelessWidget {
+enum _SortMode { newest, oldest }
+
+class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
+
+  @override
+  State<OrdersScreen> createState() => _OrdersScreenState();
+}
+
+class _OrdersScreenState extends State<OrdersScreen> {
+  final _searchCtrl = TextEditingController();
+  String _query = '';
+  _SortMode _sort = _SortMode.newest;
+
+  @override
+  void dispose() {
+    _searchCtrl.dispose();
+    super.dispose();
+  }
+
+  List<Order> _filter(List<Order> orders) {
+    final q = _query.toLowerCase();
+    var result = q.isEmpty
+        ? orders
+        : orders.where((o) =>
+            o.shortId.toLowerCase().contains(q) ||
+            o.recipientName.toLowerCase().contains(q) ||
+            o.recipientPhone.contains(q)).toList();
+    result = [...result];
+    result.sort((a, b) => _sort == _SortMode.newest
+        ? b.createdAt.compareTo(a.createdAt)
+        : a.createdAt.compareTo(b.createdAt));
+    return result;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +53,71 @@ class OrdersScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(context.l10n.customerOrders, style: AppTextStyles.heading1),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _searchCtrl,
+                  decoration: InputDecoration(
+                    hintText: context.l10n.search,
+                    prefixIcon: const Icon(Icons.search, size: 20),
+                    suffixIcon: _query.isNotEmpty
+                        ? IconButton(
+                            icon: const Icon(Icons.clear, size: 18),
+                            onPressed: () {
+                              _searchCtrl.clear();
+                              setState(() => _query = '');
+                            },
+                          )
+                        : null,
+                    isDense: true,
+                    filled: true,
+                    fillColor: AppColors.surface,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(color: AppColors.border),
+                    ),
+                  ),
+                  onChanged: (v) => setState(() => _query = v),
+                ),
+              ),
+              const SizedBox(width: 12),
+              DropdownButton<_SortMode>(
+                value: _sort,
+                underline: const SizedBox(),
+                items: const [
+                  DropdownMenuItem(value: _SortMode.newest, child: Text('Newest first')),
+                  DropdownMenuItem(value: _SortMode.oldest, child: Text('Oldest first')),
+                ],
+                onChanged: (v) => setState(() => _sort = v ?? _SortMode.newest),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
           Expanded(
             child: BlocBuilder<OrdersCubit, OrdersState>(
               builder: (context, state) {
-                if (state.status == OrdersStatus.loading || state.status == OrdersStatus.initial) {
+                if ((state.status == OrdersStatus.loading || state.status == OrdersStatus.initial) && state.orders.isEmpty) {
                   return const Center(child: CircularProgressIndicator(color: AppColors.primaryDark));
                 }
-                if (state.orders.isEmpty) {
+                if (state.status == OrdersStatus.failure && state.orders.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(context.l10n.somethingWrong, style: AppTextStyles.body),
+                        const SizedBox(height: 12),
+                        TextButton(
+                          onPressed: () => context.read<OrdersCubit>().load(),
+                          child: Text(context.l10n.retry),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                final filtered = _filter(state.orders);
+                if (filtered.isEmpty) {
                   return EmptyState(icon: Icons.receipt_long_outlined, title: context.l10n.noOrders);
                 }
                 return Container(
@@ -38,9 +127,9 @@ class OrdersScreen extends StatelessWidget {
                     border: Border.all(color: AppColors.border),
                   ),
                   child: ListView.separated(
-                    itemCount: state.orders.length,
+                    itemCount: filtered.length,
                     separatorBuilder: (_, __) => const Divider(height: 1, color: AppColors.border),
-                    itemBuilder: (context, i) => _OrderRow(order: state.orders[i]),
+                    itemBuilder: (context, i) => _OrderRow(order: filtered[i]),
                   ),
                 );
               },

@@ -30,8 +30,14 @@ class CollectionsCubit extends Cubit<CollectionsState> {
     }
   }
 
-  Future<void> delete(String id) async {
-    await _repository.deleteCollection(id);
-    await load();
+  Future<bool> delete(String id) async {
+    try {
+      await _repository.deleteCollection(id);
+      await load();
+      return true;
+    } catch (e) {
+      emit(state.copyWith(status: CollectionsStatus.failure, errorMessage: e.toString()));
+      return false;
+    }
   }
 }

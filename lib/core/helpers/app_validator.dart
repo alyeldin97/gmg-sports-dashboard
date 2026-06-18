@@ -21,4 +21,17 @@ class AppValidator {
     if (double.tryParse(value.trim()) == null) return 'Invalid number';
     return null;
   }
+
+  static String? optionalNumber(String? value) {
+    if (value == null || value.trim().isEmpty) return null;
+    if (double.tryParse(value.trim()) == null) return 'Invalid number';
+    return null;
+  }
+
+  static String? url(String? value) {
+    if (value == null || value.trim().isEmpty) return 'Required';
+    final uri = Uri.tryParse(value.trim());
+    if (uri == null || !uri.hasScheme || (!uri.scheme.startsWith('http'))) return 'Enter a valid URL';
+    return null;
+  }
 }

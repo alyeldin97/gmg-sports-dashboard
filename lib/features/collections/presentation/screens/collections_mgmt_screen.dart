@@ -6,6 +6,7 @@ import '../../../../core/styling/text_styles.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../../../../core/widgets/empty_state.dart';
+import '../../../products/presentation/cubits/products_cubit.dart';
 import '../../data/model/collection.dart';
 import '../cubits/collections_cubit.dart';
 import 'collection_form_screen.dart';
@@ -20,6 +21,50 @@ class CollectionsMgmtScreen extends StatelessWidget {
       builder: (_) => BlocProvider.value(
         value: cubit,
         child: CollectionFormDialog(collection: collection),
+      ),
+    );
+  }
+
+  void _confirmDelete(BuildContext context, Collection c) {
+    final collectionsCubit = context.read<CollectionsCubit>();
+    final productsState = context.read<ProductsCubit>().state;
+    final linkedCount = productsState.products
+        .where((p) => p.collectionIds.contains(c.id))
+        .length;
+
+    showDialog(
+      context: context,
+      builder: (dialogCtx) => AlertDialog(
+        title: Text(context.l10n.confirmDelete),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(context.l10n.deleteMessage),
+            if (linkedCount > 0) ...[
+              const SizedBox(height: 8),
+              Text(
+                'Warning: $linkedCount product(s) are linked to this collection.',
+                style: AppTextStyles.bodySmall.copyWith(color: AppColors.error),
+              ),
+            ],
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(dialogCtx), child: Text(context.l10n.cancel)),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(dialogCtx);
+              final ok = await collectionsCubit.delete(c.id);
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(ok ? 'Collection deleted' : 'Failed to delete'),
+                ));
+              }
+            },
+            child: Text(context.l10n.delete, style: const TextStyle(color: AppColors.error)),
+          ),
+        ],
       ),
     );
   }
@@ -42,8 +87,23 @@ class CollectionsMgmtScreen extends StatelessWidget {
           Expanded(
             child: BlocBuilder<CollectionsCubit, CollectionsState>(
               builder: (context, state) {
-                if (state.status == CollectionsStatus.loading || state.status == CollectionsStatus.initial) {
+                if ((state.status == CollectionsStatus.loading || state.status == CollectionsStatus.initial) && state.collections.isEmpty) {
                   return const Center(child: CircularProgressIndicator(color: AppColors.primaryDark));
+                }
+                if (state.status == CollectionsStatus.failure && state.collections.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(context.l10n.somethingWrong, style: AppTextStyles.body),
+                        const SizedBox(height: 12),
+                        TextButton(
+                          onPressed: () => context.read<CollectionsCubit>().load(),
+                          child: Text(context.l10n.retry),
+                        ),
+                      ],
+                    ),
+                  );
                 }
                 if (state.collections.isEmpty) {
                   return EmptyState(icon: Icons.grid_view_outlined, title: context.l10n.noCollections);
@@ -80,7 +140,7 @@ class CollectionsMgmtScreen extends StatelessWidget {
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.delete_outline, size: 18, color: AppColors.error),
-                                  onPressed: () => context.read<CollectionsCubit>().delete(c.id),
+                                  onPressed: () => _confirmDelete(context, c),
                                 ),
                               ],
                             ),

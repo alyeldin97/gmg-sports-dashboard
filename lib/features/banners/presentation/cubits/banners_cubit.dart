@@ -30,8 +30,14 @@ class BannersCubit extends Cubit<BannersState> {
     }
   }
 
-  Future<void> delete(String id) async {
-    await _repository.deleteBanner(id);
-    await load();
+  Future<bool> delete(String id) async {
+    try {
+      await _repository.deleteBanner(id);
+      await load();
+      return true;
+    } catch (e) {
+      emit(state.copyWith(status: BannersStatus.failure, errorMessage: e.toString()));
+      return false;
+    }
   }
 }

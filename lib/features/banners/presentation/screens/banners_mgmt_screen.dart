@@ -21,6 +21,32 @@ class BannersMgmtScreen extends StatelessWidget {
     );
   }
 
+  void _confirmDelete(BuildContext context, BannerItem b) {
+    final cubit = context.read<BannersCubit>();
+    showDialog(
+      context: context,
+      builder: (dialogCtx) => AlertDialog(
+        title: Text(context.l10n.confirmDelete),
+        content: Text(context.l10n.deleteMessage),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(dialogCtx), child: Text(context.l10n.cancel)),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(dialogCtx);
+              final ok = await cubit.delete(b.id);
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(ok ? 'Banner deleted' : 'Failed to delete'),
+                ));
+              }
+            },
+            child: Text(context.l10n.delete, style: const TextStyle(color: AppColors.error)),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -39,8 +65,23 @@ class BannersMgmtScreen extends StatelessWidget {
           Expanded(
             child: BlocBuilder<BannersCubit, BannersState>(
               builder: (context, state) {
-                if (state.status == BannersStatus.loading || state.status == BannersStatus.initial) {
+                if ((state.status == BannersStatus.loading || state.status == BannersStatus.initial) && state.banners.isEmpty) {
                   return const Center(child: CircularProgressIndicator(color: AppColors.primaryDark));
+                }
+                if (state.status == BannersStatus.failure && state.banners.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(context.l10n.somethingWrong, style: AppTextStyles.body),
+                        const SizedBox(height: 12),
+                        TextButton(
+                          onPressed: () => context.read<BannersCubit>().load(),
+                          child: Text(context.l10n.retry),
+                        ),
+                      ],
+                    ),
+                  );
                 }
                 if (state.banners.isEmpty) {
                   return EmptyState(icon: Icons.image_outlined, title: context.l10n.noBanners);
@@ -79,7 +120,7 @@ class BannersMgmtScreen extends StatelessWidget {
                           IconButton(icon: const Icon(Icons.edit_outlined, size: 18), onPressed: () => _openForm(context, banner: b)),
                           IconButton(
                             icon: const Icon(Icons.delete_outline, size: 18, color: AppColors.error),
-                            onPressed: () => context.read<BannersCubit>().delete(b.id),
+                            onPressed: () => _confirmDelete(context, b),
                           ),
                           const SizedBox(width: 8),
                         ],

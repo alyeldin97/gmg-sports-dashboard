@@ -93,7 +93,14 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     );
 
     final ok = await context.read<ProductsCubit>().save(product);
-    if (ok && mounted) Navigator.of(context).pop();
+    if (!mounted) return;
+    if (ok) {
+      Navigator.of(context).pop();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.somethingWrong)),
+      );
+    }
   }
 
   @override
@@ -215,7 +222,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
         children: [
           Expanded(flex: 3, child: AppTextField(label: context.l10n.variantName, controller: v.name)),
           const SizedBox(width: 10),
-          Expanded(flex: 2, child: AppTextField(label: context.l10n.price, controller: v.price, keyboardType: TextInputType.number)),
+          Expanded(flex: 2, child: AppTextField(label: context.l10n.price, controller: v.price, keyboardType: TextInputType.number, validator: AppValidator.optionalNumber)),
           const SizedBox(width: 10),
           Expanded(flex: 2, child: AppTextField(label: context.l10n.stock, controller: v.stock, keyboardType: TextInputType.number)),
           IconButton(

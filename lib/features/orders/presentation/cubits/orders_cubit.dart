@@ -19,8 +19,14 @@ class OrdersCubit extends Cubit<OrdersState> {
     }
   }
 
-  Future<void> updateStatus(Order order, OrderStatus status) async {
-    await _repository.updateStatus(order.id, status);
-    await load();
+  Future<bool> updateStatus(Order order, OrderStatus status) async {
+    try {
+      await _repository.updateStatus(order.id, status);
+      await load();
+      return true;
+    } catch (e) {
+      emit(state.copyWith(status: OrdersStatus.failure, errorMessage: e.toString()));
+      return false;
+    }
   }
 }
