@@ -19,6 +19,8 @@ import '../../features/products/data/repo/products_repository.dart';
 import '../../features/products/presentation/cubits/products_cubit.dart';
 import '../../features/settings/data/settings_repository.dart';
 import '../../features/settings/presentation/settings_cubit.dart';
+import '../../features/shipping/data/repo/shipping_repository.dart';
+import '../../features/shipping/presentation/cubits/shipping_cubit.dart';
 import '../navigation/navigation_cubit.dart';
 
 class DependencyInjector {
@@ -57,6 +59,11 @@ class DependencyInjector {
   BannersRepository get bannersRepository =>
       _deps[BannersRepository] ??= BannersRepository(bannersDataSource);
   BannersCubit get bannersCubit => BannersCubit(bannersRepository);
+
+  // Shipping
+  ShippingRepository get shippingRepository =>
+      _deps[ShippingRepository] ??= ShippingRepository(_supabase);
+  ShippingCubit get shippingCubit => ShippingCubit(shippingRepository);
 
   // Orders
   OrdersDataSource get ordersDataSource =>

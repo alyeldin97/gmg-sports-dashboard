@@ -297,4 +297,28 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get english => 'English';
+
+  @override
+  String get navShipping => 'الشحن';
+
+  @override
+  String get governoratesTitle => 'المحافظات';
+
+  @override
+  String get governorate => 'المحافظة';
+
+  @override
+  String get shippingCostLabel => 'تكلفة الشحن (جنيه)';
+
+  @override
+  String get deliveryDays => 'أيام التوصيل';
+
+  @override
+  String get newGovernorate => 'محافظة جديدة';
+
+  @override
+  String get editGovernorate => 'تعديل المحافظة';
+
+  @override
+  String get noGovernorates => 'لا توجد محافظات بعد';
 }

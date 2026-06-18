@@ -298,4 +298,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get english => 'English';
+
+  @override
+  String get navShipping => 'Shipping';
+
+  @override
+  String get governoratesTitle => 'Governorates';
+
+  @override
+  String get governorate => 'Governorate';
+
+  @override
+  String get shippingCostLabel => 'Shipping Cost (EGP)';
+
+  @override
+  String get deliveryDays => 'Delivery Days';
+
+  @override
+  String get newGovernorate => 'New Governorate';
+
+  @override
+  String get editGovernorate => 'Edit Governorate';
+
+  @override
+  String get noGovernorates => 'No governorates yet';
 }

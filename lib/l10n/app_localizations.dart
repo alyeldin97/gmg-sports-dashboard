@@ -673,6 +673,15 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'English'**
   String get english;
+
+  String get navShipping;
+  String get governoratesTitle;
+  String get governorate;
+  String get shippingCostLabel;
+  String get deliveryDays;
+  String get newGovernorate;
+  String get editGovernorate;
+  String get noGovernorates;
 }
 
 class _AppLocalizationsDelegate

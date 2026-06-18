@@ -13,6 +13,8 @@ import '../../../dashboard_home/presentation/dashboard_home_screen.dart';
 import '../../../orders/presentation/screens/orders_screen.dart';
 import '../../../products/presentation/screens/products_mgmt_screen.dart';
 import '../../../settings/presentation/screens/settings_screen.dart';
+import '../../../shipping/presentation/cubits/shipping_cubit.dart';
+import '../../../shipping/presentation/screens/shipping_mgmt_screen.dart';
 
 class LayoutScreen extends StatelessWidget {
   static const String routeName = '/layout';
@@ -28,6 +30,7 @@ class LayoutScreen extends StatelessWidget {
         BlocProvider(create: (_) => di.bannersCubit..load()),
         BlocProvider(create: (_) => di.ordersCubit..load()),
         BlocProvider(create: (_) => di.settingsCubit..load()),
+        BlocProvider(create: (_) => di.shippingCubit),
       ],
       child: const _LayoutView(),
     );
@@ -51,6 +54,7 @@ class _LayoutView extends StatelessWidget {
       CollectionsMgmtScreen(),
       BannersMgmtScreen(),
       OrdersScreen(),
+      ShippingMgmtScreen(),
       SettingsScreen(),
     ];
     final dests = [
@@ -59,6 +63,7 @@ class _LayoutView extends StatelessWidget {
       _NavDest(Icons.grid_view_outlined, context.l10n.navCollections),
       _NavDest(Icons.image_outlined, context.l10n.navBanners),
       _NavDest(Icons.receipt_long_outlined, context.l10n.navOrders),
+      _NavDest(Icons.local_shipping_outlined, context.l10n.navShipping),
       _NavDest(Icons.settings_outlined, context.l10n.navSettings),
     ];
 
