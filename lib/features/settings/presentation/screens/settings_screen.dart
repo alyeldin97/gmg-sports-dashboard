@@ -24,6 +24,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _initialized = false;
 
   @override
+  void initState() {
+    super.initState();
+    final state = context.read<SettingsCubit>().state;
+    if (state.status == SettingsStatus.success || state.status == SettingsStatus.saved) {
+      _hydrate(state.settings);
+    }
+  }
+
+  @override
   void dispose() {
     _deliveryFee.dispose();
     _threshold.dispose();

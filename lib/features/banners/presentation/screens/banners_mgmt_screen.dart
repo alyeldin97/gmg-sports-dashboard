@@ -36,7 +36,7 @@ class BannersMgmtScreen extends StatelessWidget {
               final ok = await cubit.delete(b.id);
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(ok ? 'Banner deleted' : 'Failed to delete'),
+                  content: Text(ok ? context.l10n.bannerDeleted : context.l10n.failedToDelete),
                 ));
               }
             },

@@ -674,6 +674,27 @@ abstract class AppLocalizations {
   /// **'English'**
   String get english;
 
+  String get deletedSuccessfully;
+  String get savedSuccessfully;
+  String get activate;
+  String get deactivate;
+  String get newestFirst;
+  String get oldestFirst;
+  String get allFilter;
+  String get productsActivated;
+  String get productsDeactivated;
+  String get productsDeleted;
+  String get productDeleted;
+  String get productUpdated;
+  String get bannerDeleted;
+  String get collectionDeleted;
+  String get statusUpdated;
+  String get failedToUpdate;
+  String get failedToDelete;
+  String get failedToUpdateStatus;
+  String linkedProductsWarning(int count);
+  String selectedCount(int count);
+  String get confirmStr;
   String get navShipping;
   String get governoratesTitle;
   String get governorate;

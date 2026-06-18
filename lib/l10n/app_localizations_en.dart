@@ -300,6 +300,70 @@ class AppLocalizationsEn extends AppLocalizations {
   String get english => 'English';
 
   @override
+  String get deletedSuccessfully => 'Deleted successfully';
+
+  @override
+  String get savedSuccessfully => 'Saved successfully';
+
+  @override
+  String get activate => 'Activate';
+
+  @override
+  String get deactivate => 'Deactivate';
+
+  @override
+  String get newestFirst => 'Newest first';
+
+  @override
+  String get oldestFirst => 'Oldest first';
+
+  @override
+  String get allFilter => 'All';
+
+  @override
+  String get productsActivated => 'Products activated';
+
+  @override
+  String get productsDeactivated => 'Products deactivated';
+
+  @override
+  String get productsDeleted => 'Products deleted';
+
+  @override
+  String get productDeleted => 'Product deleted';
+
+  @override
+  String get productUpdated => 'Product updated';
+
+  @override
+  String get bannerDeleted => 'Banner deleted';
+
+  @override
+  String get collectionDeleted => 'Collection deleted';
+
+  @override
+  String get statusUpdated => 'Status updated';
+
+  @override
+  String get failedToUpdate => 'Failed to update';
+
+  @override
+  String get failedToDelete => 'Failed to delete';
+
+  @override
+  String get failedToUpdateStatus => 'Failed to update status';
+
+  @override
+  String linkedProductsWarning(int count) =>
+      'Warning: $count product${count == 1 ? '' : 's'} linked to this collection will be unlinked.';
+
+  @override
+  String selectedCount(int count) => '$count selected';
+
+  @override
+  String get confirmStr => 'Confirm';
+
+  @override
   String get navShipping => 'Shipping';
 
   @override

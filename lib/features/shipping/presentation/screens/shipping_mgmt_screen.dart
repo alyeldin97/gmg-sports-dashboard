@@ -37,7 +37,7 @@ class _ShippingMgmtScreenState extends State<ShippingMgmtScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(context.l10n.delete),
-        content: Text('${context.l10n.deleteConfirm} "${g.name}"?'),
+        content: Text('${context.l10n.deleteMessage} "${g.name}"?'),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(ctx, false),
@@ -45,16 +45,16 @@ class _ShippingMgmtScreenState extends State<ShippingMgmtScreen> {
           TextButton(
               onPressed: () => Navigator.pop(ctx, true),
               child: Text(context.l10n.delete,
-                  style: const TextStyle(color: Colors.red))),
+                  style: const TextStyle(color: AppColors.error))),
         ],
       ),
     );
     if (ok == true && mounted) {
       final success = await context.read<ShippingCubit>().delete(g.id);
-      if (!success && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.l10n.somethingWrong)),
-        );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(success ? context.l10n.deletedSuccessfully : context.l10n.somethingWrong),
+        ));
       }
     }
   }
@@ -82,7 +82,7 @@ class _ShippingMgmtScreenState extends State<ShippingMgmtScreen> {
             child: BlocBuilder<ShippingCubit, ShippingState>(
               builder: (context, state) {
                 if (state.status == ShippingStatus.loading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator(color: AppColors.primaryDark));
                 }
                 if (state.status == ShippingStatus.failure &&
                     state.governorates.isEmpty) {
@@ -195,7 +195,7 @@ class _GovernorateTable extends StatelessWidget {
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete_outline,
-                                size: 18, color: Colors.red),
+                                size: 18, color: AppColors.error),
                             onPressed: () => onDelete(g),
                           ),
                         ],

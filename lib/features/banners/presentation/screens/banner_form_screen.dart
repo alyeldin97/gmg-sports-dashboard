@@ -74,7 +74,7 @@ class _BannerFormDialogState extends State<BannerFormDialog> {
                   Text(widget.banner == null ? context.l10n.newBanner : context.l10n.editBanner,
                       style: AppTextStyles.heading3),
                   const SizedBox(height: 16),
-                  AppTextField(label: context.l10n.title, controller: _title),
+                  AppTextField(label: context.l10n.title, controller: _title, validator: AppValidator.required),
                   const SizedBox(height: 12),
                   AppTextField(
                     label: context.l10n.imageUrl,
@@ -111,10 +111,10 @@ class _BannerFormDialogState extends State<BannerFormDialog> {
                   ),
                   if (_linkType != 'none') ...[
                     const SizedBox(height: 12),
-                    AppTextField(label: context.l10n.linkTargetId, controller: _linkId),
+                    AppTextField(label: context.l10n.linkTargetId, controller: _linkId, validator: AppValidator.required),
                   ],
                   const SizedBox(height: 12),
-                  AppTextField(label: context.l10n.sortOrder, controller: _sort, keyboardType: TextInputType.number),
+                  AppTextField(label: context.l10n.sortOrder, controller: _sort, keyboardType: TextInputType.number, validator: AppValidator.number),
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
                     activeThumbColor: AppColors.primaryDark,

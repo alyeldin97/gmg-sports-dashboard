@@ -86,9 +86,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
               DropdownButton<_SortMode>(
                 value: _sort,
                 underline: const SizedBox(),
-                items: const [
-                  DropdownMenuItem(value: _SortMode.newest, child: Text('Newest first')),
-                  DropdownMenuItem(value: _SortMode.oldest, child: Text('Oldest first')),
+                items: [
+                  DropdownMenuItem(value: _SortMode.newest, child: Text(context.l10n.newestFirst)),
+                  DropdownMenuItem(value: _SortMode.oldest, child: Text(context.l10n.oldestFirst)),
                 ],
                 onChanged: (v) => setState(() => _sort = v ?? _SortMode.newest),
               ),

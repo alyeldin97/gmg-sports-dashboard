@@ -44,7 +44,7 @@ class CollectionsMgmtScreen extends StatelessWidget {
             if (linkedCount > 0) ...[
               const SizedBox(height: 8),
               Text(
-                'Warning: $linkedCount product(s) are linked to this collection.',
+                context.l10n.linkedProductsWarning(linkedCount),
                 style: AppTextStyles.bodySmall.copyWith(color: AppColors.error),
               ),
             ],
@@ -58,7 +58,7 @@ class CollectionsMgmtScreen extends StatelessWidget {
               final ok = await collectionsCubit.delete(c.id);
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(ok ? 'Collection deleted' : 'Failed to delete'),
+                  content: Text(ok ? context.l10n.collectionDeleted : context.l10n.failedToDelete),
                 ));
               }
             },

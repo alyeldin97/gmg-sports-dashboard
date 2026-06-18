@@ -299,6 +299,70 @@ class AppLocalizationsAr extends AppLocalizations {
   String get english => 'English';
 
   @override
+  String get deletedSuccessfully => 'تم الحذف بنجاح';
+
+  @override
+  String get savedSuccessfully => 'تم الحفظ بنجاح';
+
+  @override
+  String get activate => 'تفعيل';
+
+  @override
+  String get deactivate => 'إيقاف';
+
+  @override
+  String get newestFirst => 'الأحدث أولاً';
+
+  @override
+  String get oldestFirst => 'الأقدم أولاً';
+
+  @override
+  String get allFilter => 'الكل';
+
+  @override
+  String get productsActivated => 'تم تفعيل المنتجات';
+
+  @override
+  String get productsDeactivated => 'تم إيقاف المنتجات';
+
+  @override
+  String get productsDeleted => 'تم حذف المنتجات';
+
+  @override
+  String get productDeleted => 'تم حذف المنتج';
+
+  @override
+  String get productUpdated => 'تم تحديث المنتج';
+
+  @override
+  String get bannerDeleted => 'تم حذف البانر';
+
+  @override
+  String get collectionDeleted => 'تم حذف المجموعة';
+
+  @override
+  String get statusUpdated => 'تم تحديث الحالة';
+
+  @override
+  String get failedToUpdate => 'فشل التحديث';
+
+  @override
+  String get failedToDelete => 'فشل الحذف';
+
+  @override
+  String get failedToUpdateStatus => 'فشل تحديث الحالة';
+
+  @override
+  String linkedProductsWarning(int count) =>
+      'تحذير: $count ${count == 1 ? 'منتج مرتبط' : 'منتجات مرتبطة'} بهذه المجموعة سيتم فصلها.';
+
+  @override
+  String selectedCount(int count) => 'تم اختيار $count';
+
+  @override
+  String get confirmStr => 'تأكيد';
+
+  @override
   String get navShipping => 'الشحن';
 
   @override

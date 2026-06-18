@@ -121,7 +121,7 @@ class _ProductsMgmtScreenState extends State<ProductsMgmtScreen> {
                 value: _filter,
                 underline: const SizedBox(),
                 items: [
-                  const DropdownMenuItem(value: _FilterMode.all, child: Text('All')),
+                  DropdownMenuItem(value: _FilterMode.all, child: Text(context.l10n.allFilter)),
                   DropdownMenuItem(value: _FilterMode.active, child: Text(context.l10n.active)),
                   DropdownMenuItem(value: _FilterMode.inactive, child: Text(context.l10n.inactive)),
                 ],
@@ -214,17 +214,17 @@ class _BulkActionBar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Text('${selectedIds.length} selected', style: AppTextStyles.subtitle),
+          Text(context.l10n.selectedCount(selectedIds.length), style: AppTextStyles.subtitle),
           const Spacer(),
           TextButton.icon(
             icon: const Icon(Icons.visibility_outlined, size: 18),
-            label: const Text('Activate'),
+            label: Text(context.l10n.activate),
             onPressed: () async {
               final cubit = context.read<ProductsCubit>();
               final ok = await cubit.bulkToggleActive(selectedIds, true);
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(ok ? 'Products activated' : 'Failed to update'),
+                  content: Text(ok ? context.l10n.productsActivated : context.l10n.failedToUpdate),
                 ));
                 onDone();
               }
@@ -232,13 +232,13 @@ class _BulkActionBar extends StatelessWidget {
           ),
           TextButton.icon(
             icon: const Icon(Icons.visibility_off_outlined, size: 18),
-            label: const Text('Deactivate'),
+            label: Text(context.l10n.deactivate),
             onPressed: () async {
               final cubit = context.read<ProductsCubit>();
               final ok = await cubit.bulkToggleActive(selectedIds, false);
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(ok ? 'Products deactivated' : 'Failed to update'),
+                  content: Text(ok ? context.l10n.productsDeactivated : context.l10n.failedToUpdate),
                 ));
                 onDone();
               }
@@ -269,7 +269,7 @@ class _BulkActionBar extends StatelessWidget {
               final ok = await cubit.bulkDelete(selectedIds);
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(ok ? 'Products deleted' : 'Failed to delete'),
+                  content: Text(ok ? context.l10n.productsDeleted : context.l10n.failedToDelete),
                 ));
                 onDone();
               }
@@ -313,7 +313,7 @@ class _ProductRow extends StatelessWidget {
               final ok = await cubit.delete(product.id);
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(ok ? 'Product deleted' : 'Failed to delete'),
+                  content: Text(ok ? context.l10n.productDeleted : context.l10n.failedToDelete),
                 ));
               }
             },
@@ -370,7 +370,7 @@ class _ProductRow extends StatelessWidget {
                 final ok = await cubit.toggleActive(product);
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(ok ? 'Product updated' : 'Failed to update'),
+                    content: Text(ok ? context.l10n.productUpdated : context.l10n.failedToUpdate),
                   ));
                 }
               },

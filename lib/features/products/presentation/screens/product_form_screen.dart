@@ -131,8 +131,8 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                 const SizedBox(height: 16),
                 _row([
                   AppTextField(label: context.l10n.price, controller: _price, validator: AppValidator.number, keyboardType: TextInputType.number),
-                  AppTextField(label: context.l10n.compareAtPrice, controller: _compareAt, keyboardType: TextInputType.number),
-                  AppTextField(label: context.l10n.stock, controller: _stock, keyboardType: TextInputType.number),
+                  AppTextField(label: context.l10n.compareAtPrice, controller: _compareAt, keyboardType: TextInputType.number, validator: AppValidator.optionalNumber),
+                  AppTextField(label: context.l10n.stock, controller: _stock, keyboardType: TextInputType.number, validator: AppValidator.optionalNumber),
                 ]),
                 const SizedBox(height: 16),
                 AppTextField(label: context.l10n.imageUrls, controller: _images, maxLines: 3, hint: 'https://…'),
@@ -224,7 +224,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
           const SizedBox(width: 10),
           Expanded(flex: 2, child: AppTextField(label: context.l10n.price, controller: v.price, keyboardType: TextInputType.number, validator: AppValidator.optionalNumber)),
           const SizedBox(width: 10),
-          Expanded(flex: 2, child: AppTextField(label: context.l10n.stock, controller: v.stock, keyboardType: TextInputType.number)),
+          Expanded(flex: 2, child: AppTextField(label: context.l10n.stock, controller: v.stock, keyboardType: TextInputType.number, validator: AppValidator.optionalNumber)),
           IconButton(
             icon: const Icon(Icons.remove_circle_outline, color: AppColors.error),
             onPressed: () => setState(() {
