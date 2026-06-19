@@ -596,6 +596,12 @@ abstract class AppLocalizations {
   /// **'Delivery fee'**
   String get deliveryFee;
 
+  /// No description provided for @discount.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount'**
+  String get discount;
+
   /// No description provided for @total.
   ///
   /// In en, this message translates to:
@@ -674,41 +680,191 @@ abstract class AppLocalizations {
   /// **'English'**
   String get english;
 
-  String get deletedSuccessfully;
-  String get savedSuccessfully;
-  String get activate;
-  String get deactivate;
-  String get newestFirst;
-  String get oldestFirst;
-  String get allFilter;
-  String get productsActivated;
-  String get productsDeactivated;
-  String get productsDeleted;
-  String get productDeleted;
-  String get productUpdated;
-  String get bannerDeleted;
-  String get collectionDeleted;
-  String get statusUpdated;
-  String get failedToUpdate;
-  String get failedToDelete;
-  String get failedToUpdateStatus;
-  String linkedProductsWarning(int count);
-  String selectedCount(int count);
-  String get confirmStr;
+  /// No description provided for @navShipping.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipping'**
   String get navShipping;
-  String get governoratesTitle;
-  String get governorate;
-  String get shippingCostLabel;
-  String get deliveryDays;
-  String get newGovernorate;
-  String get editGovernorate;
-  String get noGovernorates;
-  String get orderNotes;
-  String get duplicateProduct;
-  String get productDuplicated;
+
+  /// No description provided for @activate.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate'**
+  String get activate;
+
+  /// No description provided for @deactivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Deactivate'**
+  String get deactivate;
+
+  /// No description provided for @confirmStr.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirmStr;
+
+  /// No description provided for @allFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get allFilter;
+
+  /// No description provided for @newestFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Newest first'**
+  String get newestFirst;
+
+  /// No description provided for @oldestFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Oldest first'**
+  String get oldestFirst;
+
+  /// No description provided for @exportCsv.
+  ///
+  /// In en, this message translates to:
+  /// **'Export CSV'**
   String get exportCsv;
-  String get lowStockAlert;
-  String get lowStockThreshold;
+
+  /// No description provided for @orderNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Order notes'**
+  String get orderNotes;
+
+  /// No description provided for @statusUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Status updated'**
+  String get statusUpdated;
+
+  /// No description provided for @failedToUpdateStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update status'**
+  String get failedToUpdateStatus;
+
+  /// No description provided for @bannerDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Banner deleted'**
+  String get bannerDeleted;
+
+  /// No description provided for @failedToDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete'**
+  String get failedToDelete;
+
+  /// No description provided for @collectionDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Collection deleted'**
+  String get collectionDeleted;
+
+  /// No description provided for @linkedProductsWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} linked products will be unlinked.'**
+  String linkedProductsWarning(Object count);
+
+  /// No description provided for @deletedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted successfully'**
+  String get deletedSuccessfully;
+
+  /// No description provided for @failedToUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update'**
+  String get failedToUpdate;
+
+  /// No description provided for @productDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Product deleted'**
+  String get productDeleted;
+
+  /// No description provided for @productUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Product updated'**
+  String get productUpdated;
+
+  /// No description provided for @productDuplicated.
+  ///
+  /// In en, this message translates to:
+  /// **'Product duplicated'**
+  String get productDuplicated;
+
+  /// No description provided for @duplicateProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate'**
+  String get duplicateProduct;
+
+  /// No description provided for @productsDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Products deleted'**
+  String get productsDeleted;
+
+  /// No description provided for @productsActivated.
+  ///
+  /// In en, this message translates to:
+  /// **'Products activated'**
+  String get productsActivated;
+
+  /// No description provided for @productsDeactivated.
+  ///
+  /// In en, this message translates to:
+  /// **'Products deactivated'**
+  String get productsDeactivated;
+
+  /// No description provided for @selectedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected'**
+  String selectedCount(Object count);
+
+  /// No description provided for @governoratesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipping zones'**
+  String get governoratesTitle;
+
+  /// No description provided for @noGovernorates.
+  ///
+  /// In en, this message translates to:
+  /// **'No shipping zones yet'**
+  String get noGovernorates;
+
+  /// No description provided for @newGovernorate.
+  ///
+  /// In en, this message translates to:
+  /// **'New zone'**
+  String get newGovernorate;
+
+  /// No description provided for @editGovernorate.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit zone'**
+  String get editGovernorate;
+
+  /// No description provided for @shippingCostLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipping cost (EGP)'**
+  String get shippingCostLabel;
+
+  /// No description provided for @deliveryDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery days'**
+  String get deliveryDays;
 }
 
 class _AppLocalizationsDelegate

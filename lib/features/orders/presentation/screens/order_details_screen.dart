@@ -118,6 +118,8 @@ class OrderDetailsScreen extends StatelessWidget {
                         const Divider(color: AppColors.border),
                         _kvRow(context, context.l10n.subtotal, order.subtotal),
                         _kvRow(context, context.l10n.deliveryFee, order.deliveryFee),
+                        if (order.discount > 0)
+                          _kvRow(context, context.l10n.discount, -order.discount),
                         const SizedBox(height: 4),
                         _kvRow(context, context.l10n.total, order.total, bold: true),
                       ],

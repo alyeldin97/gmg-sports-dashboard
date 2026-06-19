@@ -260,6 +260,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get deliveryFee => 'رسوم التوصيل';
 
   @override
+  String get discount => 'خصم';
+
+  @override
   String get total => 'الإجمالي';
 
   @override
@@ -299,16 +302,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get english => 'English';
 
   @override
-  String get deletedSuccessfully => 'تم الحذف بنجاح';
-
-  @override
-  String get savedSuccessfully => 'تم الحفظ بنجاح';
+  String get navShipping => 'الشحن';
 
   @override
   String get activate => 'تفعيل';
 
   @override
-  String get deactivate => 'إيقاف';
+  String get deactivate => 'إلغاء التفعيل';
+
+  @override
+  String get confirmStr => 'تأكيد';
+
+  @override
+  String get allFilter => 'الكل';
 
   @override
   String get newestFirst => 'الأحدث أولاً';
@@ -317,16 +323,36 @@ class AppLocalizationsAr extends AppLocalizations {
   String get oldestFirst => 'الأقدم أولاً';
 
   @override
-  String get allFilter => 'الكل';
+  String get exportCsv => 'تصدير CSV';
 
   @override
-  String get productsActivated => 'تم تفعيل المنتجات';
+  String get orderNotes => 'ملاحظات الطلب';
 
   @override
-  String get productsDeactivated => 'تم إيقاف المنتجات';
+  String get statusUpdated => 'تم تحديث الحالة';
 
   @override
-  String get productsDeleted => 'تم حذف المنتجات';
+  String get failedToUpdateStatus => 'فشل تحديث الحالة';
+
+  @override
+  String get bannerDeleted => 'تم حذف اللافتة';
+
+  @override
+  String get failedToDelete => 'فشل الحذف';
+
+  @override
+  String get collectionDeleted => 'تم حذف المجموعة';
+
+  @override
+  String linkedProductsWarning(Object count) {
+    return 'سيتم إلغاء ربط $count منتج.';
+  }
+
+  @override
+  String get deletedSuccessfully => 'تم الحذف بنجاح';
+
+  @override
+  String get failedToUpdate => 'فشل التحديث';
 
   @override
   String get productDeleted => 'تم حذف المنتج';
@@ -335,72 +361,40 @@ class AppLocalizationsAr extends AppLocalizations {
   String get productUpdated => 'تم تحديث المنتج';
 
   @override
-  String get bannerDeleted => 'تم حذف البانر';
+  String get productDuplicated => 'تم تكرار المنتج';
 
   @override
-  String get collectionDeleted => 'تم حذف المجموعة';
+  String get duplicateProduct => 'تكرار';
 
   @override
-  String get statusUpdated => 'تم تحديث الحالة';
+  String get productsDeleted => 'تم حذف المنتجات';
 
   @override
-  String get failedToUpdate => 'فشل التحديث';
+  String get productsActivated => 'تم تفعيل المنتجات';
 
   @override
-  String get failedToDelete => 'فشل الحذف';
+  String get productsDeactivated => 'تم إلغاء تفعيل المنتجات';
 
   @override
-  String get failedToUpdateStatus => 'فشل تحديث الحالة';
+  String selectedCount(Object count) {
+    return 'تم اختيار $count';
+  }
 
   @override
-  String linkedProductsWarning(int count) =>
-      'تحذير: $count ${count == 1 ? 'منتج مرتبط' : 'منتجات مرتبطة'} بهذه المجموعة سيتم فصلها.';
+  String get governoratesTitle => 'مناطق الشحن';
 
   @override
-  String selectedCount(int count) => 'تم اختيار $count';
+  String get noGovernorates => 'لا توجد مناطق شحن بعد';
 
   @override
-  String get confirmStr => 'تأكيد';
+  String get newGovernorate => 'منطقة جديدة';
 
   @override
-  String get navShipping => 'الشحن';
+  String get editGovernorate => 'تعديل المنطقة';
 
   @override
-  String get governoratesTitle => 'المحافظات';
-
-  @override
-  String get governorate => 'المحافظة';
-
-  @override
-  String get shippingCostLabel => 'تكلفة الشحن (جنيه)';
+  String get shippingCostLabel => 'تكلفة الشحن (ج.م)';
 
   @override
   String get deliveryDays => 'أيام التوصيل';
-
-  @override
-  String get newGovernorate => 'محافظة جديدة';
-
-  @override
-  String get editGovernorate => 'تعديل المحافظة';
-
-  @override
-  String get noGovernorates => 'لا توجد محافظات بعد';
-
-  @override
-  String get orderNotes => 'ملاحظات الطلب';
-
-  @override
-  String get duplicateProduct => 'نسخ';
-
-  @override
-  String get productDuplicated => 'تم نسخ المنتج';
-
-  @override
-  String get exportCsv => 'تصدير CSV';
-
-  @override
-  String get lowStockAlert => 'مخزون منخفض';
-
-  @override
-  String get lowStockThreshold => 'حد المخزون المنخفض';
 }

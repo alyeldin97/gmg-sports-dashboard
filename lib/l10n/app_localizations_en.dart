@@ -261,6 +261,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deliveryFee => 'Delivery fee';
 
   @override
+  String get discount => 'Discount';
+
+  @override
   String get total => 'Total';
 
   @override
@@ -300,10 +303,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get english => 'English';
 
   @override
-  String get deletedSuccessfully => 'Deleted successfully';
-
-  @override
-  String get savedSuccessfully => 'Saved successfully';
+  String get navShipping => 'Shipping';
 
   @override
   String get activate => 'Activate';
@@ -312,22 +312,48 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deactivate => 'Deactivate';
 
   @override
+  String get confirmStr => 'Confirm';
+
+  @override
+  String get allFilter => 'All';
+
+  @override
   String get newestFirst => 'Newest first';
 
   @override
   String get oldestFirst => 'Oldest first';
 
   @override
-  String get allFilter => 'All';
+  String get exportCsv => 'Export CSV';
 
   @override
-  String get productsActivated => 'Products activated';
+  String get orderNotes => 'Order notes';
 
   @override
-  String get productsDeactivated => 'Products deactivated';
+  String get statusUpdated => 'Status updated';
 
   @override
-  String get productsDeleted => 'Products deleted';
+  String get failedToUpdateStatus => 'Failed to update status';
+
+  @override
+  String get bannerDeleted => 'Banner deleted';
+
+  @override
+  String get failedToDelete => 'Failed to delete';
+
+  @override
+  String get collectionDeleted => 'Collection deleted';
+
+  @override
+  String linkedProductsWarning(Object count) {
+    return '$count linked products will be unlinked.';
+  }
+
+  @override
+  String get deletedSuccessfully => 'Deleted successfully';
+
+  @override
+  String get failedToUpdate => 'Failed to update';
 
   @override
   String get productDeleted => 'Product deleted';
@@ -336,72 +362,40 @@ class AppLocalizationsEn extends AppLocalizations {
   String get productUpdated => 'Product updated';
 
   @override
-  String get bannerDeleted => 'Banner deleted';
-
-  @override
-  String get collectionDeleted => 'Collection deleted';
-
-  @override
-  String get statusUpdated => 'Status updated';
-
-  @override
-  String get failedToUpdate => 'Failed to update';
-
-  @override
-  String get failedToDelete => 'Failed to delete';
-
-  @override
-  String get failedToUpdateStatus => 'Failed to update status';
-
-  @override
-  String linkedProductsWarning(int count) =>
-      'Warning: $count product${count == 1 ? '' : 's'} linked to this collection will be unlinked.';
-
-  @override
-  String selectedCount(int count) => '$count selected';
-
-  @override
-  String get confirmStr => 'Confirm';
-
-  @override
-  String get navShipping => 'Shipping';
-
-  @override
-  String get governoratesTitle => 'Governorates';
-
-  @override
-  String get governorate => 'Governorate';
-
-  @override
-  String get shippingCostLabel => 'Shipping Cost (EGP)';
-
-  @override
-  String get deliveryDays => 'Delivery Days';
-
-  @override
-  String get newGovernorate => 'New Governorate';
-
-  @override
-  String get editGovernorate => 'Edit Governorate';
-
-  @override
-  String get noGovernorates => 'No governorates yet';
-
-  @override
-  String get orderNotes => 'Order Notes';
+  String get productDuplicated => 'Product duplicated';
 
   @override
   String get duplicateProduct => 'Duplicate';
 
   @override
-  String get productDuplicated => 'Product duplicated';
+  String get productsDeleted => 'Products deleted';
 
   @override
-  String get exportCsv => 'Export CSV';
+  String get productsActivated => 'Products activated';
 
   @override
-  String get lowStockAlert => 'Low Stock';
+  String get productsDeactivated => 'Products deactivated';
 
   @override
-  String get lowStockThreshold => 'Low stock threshold';
+  String selectedCount(Object count) {
+    return '$count selected';
+  }
+
+  @override
+  String get governoratesTitle => 'Shipping zones';
+
+  @override
+  String get noGovernorates => 'No shipping zones yet';
+
+  @override
+  String get newGovernorate => 'New zone';
+
+  @override
+  String get editGovernorate => 'Edit zone';
+
+  @override
+  String get shippingCostLabel => 'Shipping cost (EGP)';
+
+  @override
+  String get deliveryDays => 'Delivery days';
 }

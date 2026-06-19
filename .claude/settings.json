@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(gh api *)",
+      "Bash(git pull *)",
+      "Bash(xargs -I{} dirname {})",
+      "WebSearch",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "Read(//Users/alyeldinmuhammad/.claude/**)",
+      "Bash(claude mcp *)",
+      "Bash(netlify --version)",
+      "Bash(npm install *)",
+      "Bash(NETLIFY_AUTH_TOKEN=nfp_C97H84xxtufMY7gNHVx6y7eoRFDaMYhR1259 netlify status)",
+      "Bash(NETLIFY_AUTH_TOKEN=nfp_C97H84xxtufMY7gNHVx6y7eoRFDaMYhR1259 netlify sites:list)",
+      "Bash(flutter build *)",
+      "Bash(NETLIFY_AUTH_TOKEN=nfp_C97H84xxtufMY7gNHVx6y7eoRFDaMYhR1259 netlify deploy --prod --dir=build/web --name=gmg-sports-dashboard)",
+      "Bash(NETLIFY_AUTH_TOKEN=nfp_C97H84xxtufMY7gNHVx6y7eoRFDaMYhR1259 netlify deploy --prod --dir=build/web --name=gmg-sports-app)",
+      "Bash(NETLIFY_AUTH_TOKEN=nfp_C97H84xxtufMY7gNHVx6y7eoRFDaMYhR1259 netlify deploy --prod --dir=build/web --site-name=gmg-sports-dashboard --auth=nfp_C97H84xxtufMY7gNHVx6y7eoRFDaMYhR1259)",
+      "Bash(NETLIFY_AUTH_TOKEN=nfp_C97H84xxtufMY7gNHVx6y7eoRFDaMYhR1259 netlify deploy --prod --dir=build/web --site-name=gmg-sports-app --auth=nfp_C97H84xxtufMY7gNHVx6y7eoRFDaMYhR1259)",
+      "Bash(curl -s 'https://nmyzqekuqeneahzuhnap.supabase.co/rest/v1/profiles?select=id,email,full_name,role,phone&limit=20' -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5teXpxZWt1cWVuZWFoenVobmFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0NTExNTAsImV4cCI6MjA5NzAyNzE1MH0.aiXNR68kUcbdxUbvUcN2p1UuwfV_3gvFsOZBUqjGHDU' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5teXpxZWt1cWVuZWFoenVobmFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0NTExNTAsImV4cCI6MjA5NzAyNzE1MH0.aiXNR68kUcbdxUbvUcN2p1UuwfV_3gvFsOZBUqjGHDU')",
+      "Bash(curl -s 'https://nmyzqekuqeneahzuhnap.supabase.co/rest/v1/profiles?select=*&limit=20' -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5teXpxZWt1cWVuZWFoenVobmFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0NTExNTAsImV4cCI6MjA5NzAyNzE1MH0.aiXNR68kUcbdxUbvUcN2p1UuwfV_3gvFsOZBUqjGHDU' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5teXpxZWt1cWVuZWFoenVobmFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0NTExNTAsImV4cCI6MjA5NzAyNzE1MH0.aiXNR68kUcbdxUbvUcN2p1UuwfV_3gvFsOZBUqjGHDU')",
+      "Bash(curl -s 'https://jljiyycxkyopghrfdbcf.supabase.co/rest/v1/profiles?select=*&limit=20' -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impsaml5eWN4a3lvcGdocmZkYmNmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTI3MDE4NywiZXhwIjoyMDk2ODQ2MTg3fQ.3tVH_mFH3b-aepK39XMWbYe62u7u1aRAdQU9a7_QtKY' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impsaml5eWN4a3lvcGdocmZkYmNmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTI3MDE4NywiZXhwIjoyMDk2ODQ2MTg3fQ.3tVH_mFH3b-aepK39XMWbYe62u7u1aRAdQU9a7_QtKY')",
+      "Bash(curl -s 'https://nmyzqekuqeneahzuhnap.supabase.co/rest/v1/profiles?select=*&limit=20' -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impsaml5eWN4a3lvcGdocmZkYmNmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTI3MDE4NywiZXhwIjoyMDk2ODQ2MTg3fQ.3tVH_mFH3b-aepK39XMWbYe62u7u1aRAdQU9a7_QtKY' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impsaml5eWN4a3lvcGdocmZkYmNmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTI3MDE4NywiZXhwIjoyMDk2ODQ2MTg3fQ.3tVH_mFH3b-aepK39XMWbYe62u7u1aRAdQU9a7_QtKY')",
+      "Bash(curl -s 'https://nmyzqekuqeneahzuhnap.supabase.co/rest/v1/profiles?select=*&limit=20' -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5teXpxZWt1cWVuZWFoenVobmFwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTQ1MTE1MCwiZXhwIjoyMDk3MDI3MTUwfQ.Z2wOUKmatrg-dmwC8P8gkW-5lmZi_eoXNIHqq8RF0L0' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5teXpxZWt1cWVuZWFoenVobmFwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTQ1MTE1MCwiZXhwIjoyMDk3MDI3MTUwfQ.Z2wOUKmatrg-dmwC8P8gkW-5lmZi_eoXNIHqq8RF0L0')",
+      "Bash(curl -s https://nmyzqekuqeneahzuhnap.supabase.co/auth/v1/admin/users -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5teXpxZWt1cWVuZWFoenVobmFwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTQ1MTE1MCwiZXhwIjoyMDk3MDI3MTUwfQ.Z2wOUKmatrg-dmwC8P8gkW-5lmZi_eoXNIHqq8RF0L0' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5teXpxZWt1cWVuZWFoenVobmFwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTQ1MTE1MCwiZXhwIjoyMDk3MDI3MTUwfQ.Z2wOUKmatrg-dmwC8P8gkW-5lmZi_eoXNIHqq8RF0L0')",
+      "Bash(python3 -c ' *)",
+      "Bash(curl -s -X POST https://nmyzqekuqeneahzuhnap.supabase.co/auth/v1/token?grant_type=password -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5teXpxZWt1cWVuZWFoenVobmFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0NTExNTAsImV4cCI6MjA5NzAyNzE1MH0.aiXNR68kUcbdxUbvUcN2p1UuwfV_3gvFsOZBUqjGHDU' -H 'Content-Type: application/json' -d '{\"email\":\"ahmed@test.com\",\"password\":\"Test@1234\"}')"
+    ]
+  }
+}
