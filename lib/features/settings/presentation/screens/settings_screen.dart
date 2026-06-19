@@ -20,8 +20,8 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   final _formKey = GlobalKey<FormState>();
   final _deliveryFee = TextEditingController();
-  final _threshold = TextEditingController();
   final _instapay = TextEditingController();
+  final _pixelId = TextEditingController();
   bool _initialized = false;
 
   @override
@@ -39,25 +39,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void dispose() {
     _deliveryFee.dispose();
-    _threshold.dispose();
     _instapay.dispose();
+    _pixelId.dispose();
     super.dispose();
   }
 
   void _hydrate(AppSettings s) {
     if (_initialized) return;
     _deliveryFee.text = s.deliveryFee.toStringAsFixed(0);
-    _threshold.text = s.freeDeliveryThreshold.toStringAsFixed(0);
     _instapay.text = s.instapayHandle;
+    _pixelId.text = s.metaPixelId;
     _initialized = true;
   }
 
   void _save() {
     if (!(_formKey.currentState?.validate() ?? false)) return;
-    context.read<SettingsCubit>().save(AppSettings(
+    final current = context.read<SettingsCubit>().state.settings;
+    context.read<SettingsCubit>().save(current.copyWith(
           deliveryFee: double.tryParse(_deliveryFee.text.trim()) ?? 0,
-          freeDeliveryThreshold: double.tryParse(_threshold.text.trim()) ?? 0,
           instapayHandle: _instapay.text.trim(),
+          metaPixelId: _pixelId.text.trim(),
         ));
   }
 
@@ -87,7 +88,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Text(context.l10n.navSettings, style: AppTextStyles.heading1),
               const SizedBox(height: 24),
 
-              // ── Store Settings ──────────────────────────────────────────
+              // ── Store Settings ────────────────────────────────────────────
               _SectionCard(
                 title: context.l10n.storeSettings,
                 child: loading
@@ -100,13 +101,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             AppTextField(
                               label: context.l10n.deliveryFee,
                               controller: _deliveryFee,
-                              validator: AppValidator.number,
-                              keyboardType: TextInputType.number,
-                            ),
-                            const SizedBox(height: 16),
-                            AppTextField(
-                              label: context.l10n.freeDeliveryThreshold,
-                              controller: _threshold,
                               validator: AppValidator.number,
                               keyboardType: TextInputType.number,
                             ),
@@ -129,7 +123,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               const SizedBox(height: 20),
 
-              // ── Account ─────────────────────────────────────────────────
+              // ── Integrations ─────────────────────────────────────────────
+              _SectionCard(
+                title: context.l10n.integrations,
+                child: loading
+                    ? const SizedBox.shrink()
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          AppTextField(
+                            label: context.l10n.metaPixelId,
+                            controller: _pixelId,
+                            hint: context.l10n.metaPixelIdHint,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            context.l10n.metaPixelIdDesc,
+                            style: AppTextStyles.bodySmall.copyWith(color: AppColors.textLight),
+                          ),
+                          const SizedBox(height: 16),
+                          AppButton(
+                            label: context.l10n.save,
+                            expand: true,
+                            loading: state.status == SettingsStatus.saving,
+                            onPressed: _save,
+                          ),
+                        ],
+                      ),
+              ),
+              const SizedBox(height: 20),
+
+              // ── Account ───────────────────────────────────────────────────
               _SectionCard(
                 title: context.l10n.accountSettings,
                 child: BlocBuilder<AuthCubit, AuthState>(

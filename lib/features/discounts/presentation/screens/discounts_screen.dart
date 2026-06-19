@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/helpers/app_validator.dart';
 import '../../../../core/localization/l10n_extension.dart';
 import '../../../../core/styling/colors.dart';
 import '../../../../core/styling/text_styles.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_text_field.dart';
+import '../../../settings/data/app_settings.dart';
+import '../../../settings/presentation/settings_cubit.dart';
 import '../../data/model/coupon.dart';
 import '../cubits/coupons_cubit.dart';
 
@@ -77,7 +80,13 @@ class _DiscountsScreenState extends State<DiscountsScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
+          // ── Free Shipping Rule ──────────────────────────────────────────
+          const _FreeShippingCard(),
+          const SizedBox(height: 20),
+          // ── Coupon Codes ───────────────────────────────────────────────
+          Text(context.l10n.couponCodes, style: AppTextStyles.subtitle),
+          const SizedBox(height: 12),
           Expanded(
             child: BlocBuilder<CouponsCubit, CouponsState>(
               builder: (context, state) {
@@ -98,6 +107,117 @@ class _DiscountsScreenState extends State<DiscountsScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+// ─── Free Shipping Card ───────────────────────────────────────────────────────
+
+class _FreeShippingCard extends StatefulWidget {
+  const _FreeShippingCard();
+
+  @override
+  State<_FreeShippingCard> createState() => _FreeShippingCardState();
+}
+
+class _FreeShippingCardState extends State<_FreeShippingCard> {
+  final _ctrl = TextEditingController();
+  bool _editing = false;
+  bool _saving = false;
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  void _startEdit(double current) {
+    _ctrl.text = current.toStringAsFixed(0);
+    setState(() => _editing = true);
+  }
+
+  Future<void> _save(AppSettings settings) async {
+    final v = double.tryParse(_ctrl.text.trim());
+    if (v == null || v < 0) return;
+    setState(() => _saving = true);
+    await context.read<SettingsCubit>().save(settings.copyWith(freeDeliveryThreshold: v));
+    if (mounted) setState(() { _editing = false; _saving = false; });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SettingsCubit, SettingsState>(
+      builder: (context, state) {
+        final threshold = state.settings.freeDeliveryThreshold;
+        return Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.border),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryMist,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(Icons.local_shipping_outlined,
+                    color: AppColors.primaryDark, size: 22),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: _editing
+                    ? Row(
+                        children: [
+                          Expanded(
+                            child: AppTextField(
+                              label: context.l10n.freeShippingThreshold,
+                              controller: _ctrl,
+                              keyboardType: TextInputType.number,
+                              validator: AppValidator.number,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          AppButton(
+                            label: context.l10n.save,
+                            loading: _saving,
+                            onPressed: () => _save(state.settings),
+                          ),
+                          const SizedBox(width: 8),
+                          IconButton(
+                            icon: const Icon(Icons.close, size: 18),
+                            onPressed: () => setState(() => _editing = false),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(context.l10n.freeShippingRule, style: AppTextStyles.label),
+                          const SizedBox(height: 2),
+                          Text(
+                            threshold > 0
+                                ? context.l10n.freeShippingThresholdValue(threshold.toStringAsFixed(0))
+                                : context.l10n.disabled,
+                            style: AppTextStyles.body.copyWith(
+                              color: threshold > 0 ? AppColors.accentGreen : AppColors.textLight,
+                            ),
+                          ),
+                        ],
+                      ),
+              ),
+              if (!_editing)
+                IconButton(
+                  icon: const Icon(Icons.edit_outlined, size: 18, color: AppColors.textLight),
+                  onPressed: () => _startEdit(threshold),
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

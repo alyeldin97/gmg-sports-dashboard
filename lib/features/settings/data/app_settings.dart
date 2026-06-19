@@ -5,27 +5,44 @@ class AppSettings extends Equatable {
   final double deliveryFee;
   final double freeDeliveryThreshold;
   final String instapayHandle;
+  final String metaPixelId;
 
   const AppSettings({
     this.currency = 'EGP',
     this.deliveryFee = 50,
     this.freeDeliveryThreshold = 1500,
     this.instapayHandle = 'gmgsports@instapay',
+    this.metaPixelId = '',
   });
+
+  AppSettings copyWith({
+    double? deliveryFee,
+    double? freeDeliveryThreshold,
+    String? instapayHandle,
+    String? metaPixelId,
+  }) => AppSettings(
+        currency: currency,
+        deliveryFee: deliveryFee ?? this.deliveryFee,
+        freeDeliveryThreshold: freeDeliveryThreshold ?? this.freeDeliveryThreshold,
+        instapayHandle: instapayHandle ?? this.instapayHandle,
+        metaPixelId: metaPixelId ?? this.metaPixelId,
+      );
 
   factory AppSettings.fromJson(Map<String, dynamic> j) => AppSettings(
         currency: j['currency'] as String? ?? 'EGP',
         deliveryFee: (j['delivery_fee'] as num?)?.toDouble() ?? 50,
         freeDeliveryThreshold: (j['free_delivery_threshold'] as num?)?.toDouble() ?? 1500,
         instapayHandle: j['instapay_handle'] as String? ?? 'gmgsports@instapay',
+        metaPixelId: j['meta_pixel_id'] as String? ?? '',
       );
 
   Map<String, dynamic> toUpdateJson() => {
         'delivery_fee': deliveryFee,
         'free_delivery_threshold': freeDeliveryThreshold,
         'instapay_handle': instapayHandle,
+        'meta_pixel_id': metaPixelId,
       };
 
   @override
-  List<Object?> get props => [currency, deliveryFee, freeDeliveryThreshold, instapayHandle];
+  List<Object?> get props => [currency, deliveryFee, freeDeliveryThreshold, instapayHandle, metaPixelId];
 }
