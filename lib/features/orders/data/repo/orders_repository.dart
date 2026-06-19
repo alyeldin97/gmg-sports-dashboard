@@ -5,6 +5,7 @@ class OrdersRepository {
   final OrdersDataSource _dataSource;
   OrdersRepository(this._dataSource);
 
+  Stream<List<Order>> watchOrders() => _dataSource.watchOrders();
   Future<List<Order>> getOrders() => _dataSource.getOrders();
   Future<Order> getOrderById(String id) => _dataSource.getOrderById(id);
   Future<void> updateStatus(String id, OrderStatus status) => _dataSource.updateStatus(id, status);

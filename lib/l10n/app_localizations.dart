@@ -865,6 +865,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delivery days'**
   String get deliveryDays;
+
+  /// No description provided for @navDiscounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Discounts'**
+  String get navDiscounts;
+
+  /// No description provided for @discountsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount Codes'**
+  String get discountsTitle;
+
+  /// No description provided for @noCoupons.
+  ///
+  /// In en, this message translates to:
+  /// **'No coupons yet'**
+  String get noCoupons;
+
+  /// No description provided for @newCoupon.
+  ///
+  /// In en, this message translates to:
+  /// **'New coupon'**
+  String get newCoupon;
+
+  /// No description provided for @editCoupon.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit coupon'**
+  String get editCoupon;
+
+  /// No description provided for @couponCodeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Coupon code'**
+  String get couponCodeLabel;
+
+  /// No description provided for @discountType.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount type'**
+  String get discountType;
+
+  /// No description provided for @discountValueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Value'**
+  String get discountValueLabel;
+
+  /// No description provided for @minOrderAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Min. order (optional)'**
+  String get minOrderAmountLabel;
+
+  /// No description provided for @maxUsesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Max uses (optional)'**
+  String get maxUsesLabel;
+
+  /// No description provided for @expiryDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Expiry date'**
+  String get expiryDateLabel;
+
+  /// No description provided for @generateCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate'**
+  String get generateCode;
+
+  /// No description provided for @percentageType.
+  ///
+  /// In en, this message translates to:
+  /// **'Percentage (%)'**
+  String get percentageType;
+
+  /// No description provided for @fixedType.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed (EGP)'**
+  String get fixedType;
+
+  /// No description provided for @usedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Used'**
+  String get usedCount;
+
+  /// No description provided for @couponCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Coupon created'**
+  String get couponCreated;
+
+  /// No description provided for @couponUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Coupon updated'**
+  String get couponUpdated;
+
+  /// No description provided for @couponDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Coupon deleted'**
+  String get couponDeleted;
+
+  /// No description provided for @noExpiry.
+  ///
+  /// In en, this message translates to:
+  /// **'No expiry'**
+  String get noExpiry;
+
+  /// No description provided for @storeSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Store settings'**
+  String get storeSettings;
+
+  /// No description provided for @accountSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get accountSettings;
+
+  /// No description provided for @adminEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin email'**
+  String get adminEmail;
 }
 
 class _AppLocalizationsDelegate

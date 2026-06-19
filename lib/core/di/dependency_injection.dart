@@ -17,6 +17,9 @@ import '../../features/products/data/remote/impl/supabase_products_data_source.d
 import '../../features/products/data/remote/products_data_source.dart';
 import '../../features/products/data/repo/products_repository.dart';
 import '../../features/products/presentation/cubits/products_cubit.dart';
+import '../../features/discounts/data/remote/coupons_data_source.dart';
+import '../../features/discounts/data/repo/coupons_repository.dart';
+import '../../features/discounts/presentation/cubits/coupons_cubit.dart';
 import '../../features/settings/data/settings_repository.dart';
 import '../../features/settings/presentation/settings_cubit.dart';
 import '../../features/shipping/data/repo/shipping_repository.dart';
@@ -76,6 +79,13 @@ class DependencyInjector {
   SettingsRepository get settingsRepository =>
       _deps[SettingsRepository] ??= SettingsRepository(_supabase);
   SettingsCubit get settingsCubit => SettingsCubit(settingsRepository);
+
+  // Discounts / Coupons
+  CouponsDataSource get couponsDataSource =>
+      _deps[CouponsDataSource] ??= CouponsDataSource(_supabase);
+  CouponsRepository get couponsRepository =>
+      _deps[CouponsRepository] ??= CouponsRepository(couponsDataSource);
+  CouponsCubit get couponsCubit => CouponsCubit(couponsRepository);
 
   // Navigation
   NavigationCubit get navigationCubit => _deps[NavigationCubit] ??= NavigationCubit();

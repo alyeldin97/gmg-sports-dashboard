@@ -7,6 +7,14 @@ class OrdersDataSource {
 
   static const _select = '*, order_items(*)';
 
+  Stream<List<Order>> watchOrders() {
+    return _client
+        .from('orders')
+        .stream(primaryKey: ['id'])
+        .order('created_at', ascending: false)
+        .map((rows) => rows.map((e) => Order.fromJson(e)).toList());
+  }
+
   Future<List<Order>> getOrders() async {
     final rows = await _client.from('orders').select(_select).order('created_at', ascending: false);
     return (rows as List).map((e) => Order.fromJson(e as Map<String, dynamic>)).toList();

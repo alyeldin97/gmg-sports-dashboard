@@ -397,4 +397,70 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get deliveryDays => 'أيام التوصيل';
+
+  @override
+  String get navDiscounts => 'الخصومات';
+
+  @override
+  String get discountsTitle => 'أكواد الخصم';
+
+  @override
+  String get noCoupons => 'لا توجد كوبونات بعد';
+
+  @override
+  String get newCoupon => 'كوبون جديد';
+
+  @override
+  String get editCoupon => 'تعديل الكوبون';
+
+  @override
+  String get couponCodeLabel => 'كود الخصم';
+
+  @override
+  String get discountType => 'نوع الخصم';
+
+  @override
+  String get discountValueLabel => 'القيمة';
+
+  @override
+  String get minOrderAmountLabel => 'حد أدنى للطلب (اختياري)';
+
+  @override
+  String get maxUsesLabel => 'أقصى استخدام (اختياري)';
+
+  @override
+  String get expiryDateLabel => 'تاريخ الانتهاء';
+
+  @override
+  String get generateCode => 'توليد';
+
+  @override
+  String get percentageType => 'نسبة مئوية (%)';
+
+  @override
+  String get fixedType => 'مبلغ ثابت (ج.م)';
+
+  @override
+  String get usedCount => 'الاستخدام';
+
+  @override
+  String get couponCreated => 'تم إنشاء الكوبون';
+
+  @override
+  String get couponUpdated => 'تم تحديث الكوبون';
+
+  @override
+  String get couponDeleted => 'تم حذف الكوبون';
+
+  @override
+  String get noExpiry => 'بدون انتهاء';
+
+  @override
+  String get storeSettings => 'إعدادات المتجر';
+
+  @override
+  String get accountSettings => 'الحساب';
+
+  @override
+  String get adminEmail => 'البريد الإلكتروني للمسؤول';
 }

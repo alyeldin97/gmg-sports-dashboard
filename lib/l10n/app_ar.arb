@@ -143,5 +143,29 @@
   "newGovernorate": "منطقة جديدة",
   "editGovernorate": "تعديل المنطقة",
   "shippingCostLabel": "تكلفة الشحن (ج.م)",
-  "deliveryDays": "أيام التوصيل"
+  "deliveryDays": "أيام التوصيل",
+
+  "navDiscounts": "الخصومات",
+  "discountsTitle": "أكواد الخصم",
+  "noCoupons": "لا توجد كوبونات بعد",
+  "newCoupon": "كوبون جديد",
+  "editCoupon": "تعديل الكوبون",
+  "couponCodeLabel": "كود الخصم",
+  "discountType": "نوع الخصم",
+  "discountValueLabel": "القيمة",
+  "minOrderAmountLabel": "حد أدنى للطلب (اختياري)",
+  "maxUsesLabel": "أقصى استخدام (اختياري)",
+  "expiryDateLabel": "تاريخ الانتهاء",
+  "generateCode": "توليد",
+  "percentageType": "نسبة مئوية (%)",
+  "fixedType": "مبلغ ثابت (ج.م)",
+  "usedCount": "الاستخدام",
+  "couponCreated": "تم إنشاء الكوبون",
+  "couponUpdated": "تم تحديث الكوبون",
+  "couponDeleted": "تم حذف الكوبون",
+  "noExpiry": "بدون انتهاء",
+
+  "storeSettings": "إعدادات المتجر",
+  "accountSettings": "الحساب",
+  "adminEmail": "البريد الإلكتروني للمسؤول"
 }

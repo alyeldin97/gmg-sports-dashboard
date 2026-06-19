@@ -398,4 +398,70 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deliveryDays => 'Delivery days';
+
+  @override
+  String get navDiscounts => 'Discounts';
+
+  @override
+  String get discountsTitle => 'Discount Codes';
+
+  @override
+  String get noCoupons => 'No coupons yet';
+
+  @override
+  String get newCoupon => 'New coupon';
+
+  @override
+  String get editCoupon => 'Edit coupon';
+
+  @override
+  String get couponCodeLabel => 'Coupon code';
+
+  @override
+  String get discountType => 'Discount type';
+
+  @override
+  String get discountValueLabel => 'Value';
+
+  @override
+  String get minOrderAmountLabel => 'Min. order (optional)';
+
+  @override
+  String get maxUsesLabel => 'Max uses (optional)';
+
+  @override
+  String get expiryDateLabel => 'Expiry date';
+
+  @override
+  String get generateCode => 'Generate';
+
+  @override
+  String get percentageType => 'Percentage (%)';
+
+  @override
+  String get fixedType => 'Fixed (EGP)';
+
+  @override
+  String get usedCount => 'Used';
+
+  @override
+  String get couponCreated => 'Coupon created';
+
+  @override
+  String get couponUpdated => 'Coupon updated';
+
+  @override
+  String get couponDeleted => 'Coupon deleted';
+
+  @override
+  String get noExpiry => 'No expiry';
+
+  @override
+  String get storeSettings => 'Store settings';
+
+  @override
+  String get accountSettings => 'Account';
+
+  @override
+  String get adminEmail => 'Admin email';
 }

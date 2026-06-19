@@ -143,5 +143,29 @@
   "newGovernorate": "New zone",
   "editGovernorate": "Edit zone",
   "shippingCostLabel": "Shipping cost (EGP)",
-  "deliveryDays": "Delivery days"
+  "deliveryDays": "Delivery days",
+
+  "navDiscounts": "Discounts",
+  "discountsTitle": "Discount Codes",
+  "noCoupons": "No coupons yet",
+  "newCoupon": "New coupon",
+  "editCoupon": "Edit coupon",
+  "couponCodeLabel": "Coupon code",
+  "discountType": "Discount type",
+  "discountValueLabel": "Value",
+  "minOrderAmountLabel": "Min. order (optional)",
+  "maxUsesLabel": "Max uses (optional)",
+  "expiryDateLabel": "Expiry date",
+  "generateCode": "Generate",
+  "percentageType": "Percentage (%)",
+  "fixedType": "Fixed (EGP)",
+  "usedCount": "Used",
+  "couponCreated": "Coupon created",
+  "couponUpdated": "Coupon updated",
+  "couponDeleted": "Coupon deleted",
+  "noExpiry": "No expiry",
+
+  "storeSettings": "Store settings",
+  "accountSettings": "Account",
+  "adminEmail": "Admin email"
 }

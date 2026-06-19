@@ -6,6 +6,7 @@ import '../../../../core/styling/colors.dart';
 import '../../../../core/styling/text_styles.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_text_field.dart';
+import '../../../auth/presentation/cubits/auth_cubit.dart';
 import '../../data/app_settings.dart';
 import '../settings_cubit.dart';
 
@@ -26,9 +27,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void initState() {
     super.initState();
-    final state = context.read<SettingsCubit>().state;
-    if (state.status == SettingsStatus.success || state.status == SettingsStatus.saved) {
-      _hydrate(state.settings);
+    final cubit = context.read<SettingsCubit>();
+    if (cubit.state.status == SettingsStatus.initial) {
+      cubit.load();
+    } else if (cubit.state.status == SettingsStatus.success ||
+        cubit.state.status == SettingsStatus.saved) {
+      _hydrate(cubit.state.settings);
     }
   }
 
@@ -42,8 +46,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   void _hydrate(AppSettings s) {
     if (_initialized) return;
-    _deliveryFee.text = s.deliveryFee.toString();
-    _threshold.text = s.freeDeliveryThreshold.toString();
+    _deliveryFee.text = s.deliveryFee.toStringAsFixed(0);
+    _threshold.text = s.freeDeliveryThreshold.toStringAsFixed(0);
     _instapay.text = s.instapayHandle;
     _initialized = true;
   }
@@ -65,45 +69,90 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _hydrate(state.settings);
         }
         if (state.status == SettingsStatus.saved) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.settingsSaved)));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(context.l10n.settingsSaved)));
+        }
+        if (state.status == SettingsStatus.failure) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(state.errorMessage ?? context.l10n.somethingWrong)));
         }
       },
       builder: (context, state) {
-        return Padding(
+        final loading = state.status == SettingsStatus.loading && !_initialized;
+        return SingleChildScrollView(
           padding: const EdgeInsets.all(28),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(context.l10n.navSettings, style: AppTextStyles.heading1),
-              const SizedBox(height: 20),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 520),
-                child: Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: AppColors.border),
-                  ),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        AppTextField(label: context.l10n.deliveryFee, controller: _deliveryFee, validator: AppValidator.number, keyboardType: TextInputType.number),
-                        const SizedBox(height: 16),
-                        AppTextField(label: context.l10n.freeDeliveryThreshold, controller: _threshold, validator: AppValidator.number, keyboardType: TextInputType.number),
-                        const SizedBox(height: 16),
-                        AppTextField(label: context.l10n.instapayHandle, controller: _instapay, validator: AppValidator.required),
-                        const SizedBox(height: 24),
-                        AppButton(
-                          label: context.l10n.save,
-                          expand: true,
-                          loading: state.status == SettingsStatus.saving,
-                          onPressed: _save,
+              const SizedBox(height: 24),
+
+              // ── Store Settings ──────────────────────────────────────────
+              _SectionCard(
+                title: context.l10n.storeSettings,
+                child: loading
+                    ? const Center(child: CircularProgressIndicator(color: AppColors.primaryDark))
+                    : Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            AppTextField(
+                              label: context.l10n.deliveryFee,
+                              controller: _deliveryFee,
+                              validator: AppValidator.number,
+                              keyboardType: TextInputType.number,
+                            ),
+                            const SizedBox(height: 16),
+                            AppTextField(
+                              label: context.l10n.freeDeliveryThreshold,
+                              controller: _threshold,
+                              validator: AppValidator.number,
+                              keyboardType: TextInputType.number,
+                            ),
+                            const SizedBox(height: 16),
+                            AppTextField(
+                              label: context.l10n.instapayHandle,
+                              controller: _instapay,
+                              validator: AppValidator.required,
+                            ),
+                            const SizedBox(height: 24),
+                            AppButton(
+                              label: context.l10n.save,
+                              expand: true,
+                              loading: state.status == SettingsStatus.saving,
+                              onPressed: _save,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+              ),
+              const SizedBox(height: 20),
+
+              // ── Account ─────────────────────────────────────────────────
+              _SectionCard(
+                title: context.l10n.accountSettings,
+                child: BlocBuilder<AuthCubit, AuthState>(
+                  builder: (context, auth) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _InfoRow(
+                        icon: Icons.admin_panel_settings_outlined,
+                        label: context.l10n.adminEmail,
+                        value: auth.user?.email ?? '—',
+                      ),
+                      const SizedBox(height: 16),
+                      OutlinedButton.icon(
+                        onPressed: () => context.read<AuthCubit>().signOut(),
+                        icon: const Icon(Icons.logout, size: 18, color: AppColors.error),
+                        label: Text(context.l10n.logout,
+                            style: const TextStyle(color: AppColors.error)),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: AppColors.error),
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -111,6 +160,61 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         );
       },
+    );
+  }
+}
+
+class _SectionCard extends StatelessWidget {
+  const _SectionCard({required this.title, required this.child});
+  final String title;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 520),
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: AppTextStyles.subtitle),
+            const SizedBox(height: 16),
+            const Divider(color: AppColors.border, height: 1),
+            const SizedBox(height: 16),
+            child,
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _InfoRow extends StatelessWidget {
+  const _InfoRow({required this.icon, required this.label, required this.value});
+  final IconData icon;
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, size: 18, color: AppColors.textLight),
+        const SizedBox(width: 10),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: AppTextStyles.bodySmall.copyWith(color: AppColors.textLight)),
+            Text(value, style: AppTextStyles.label),
+          ],
+        ),
+      ],
     );
   }
 }

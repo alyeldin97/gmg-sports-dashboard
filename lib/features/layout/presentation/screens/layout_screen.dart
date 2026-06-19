@@ -7,9 +7,12 @@ import '../../../../core/navigation/navigation_cubit.dart';
 import '../../../../core/styling/colors.dart';
 import '../../../../core/styling/text_styles.dart';
 import '../../../auth/presentation/cubits/auth_cubit.dart';
+import '../../../auth/presentation/screens/login_screen.dart';
 import '../../../banners/presentation/screens/banners_mgmt_screen.dart';
 import '../../../collections/presentation/screens/collections_mgmt_screen.dart';
 import '../../../dashboard_home/presentation/dashboard_home_screen.dart';
+import '../../../discounts/presentation/cubits/coupons_cubit.dart';
+import '../../../discounts/presentation/screens/discounts_screen.dart';
 import '../../../orders/presentation/screens/orders_screen.dart';
 import '../../../products/presentation/screens/products_mgmt_screen.dart';
 import '../../../settings/presentation/screens/settings_screen.dart';
@@ -28,11 +31,18 @@ class LayoutScreen extends StatelessWidget {
         BlocProvider(create: (_) => di.productsCubit..load()),
         BlocProvider(create: (_) => di.collectionsCubit..load()),
         BlocProvider(create: (_) => di.bannersCubit..load()),
-        BlocProvider(create: (_) => di.ordersCubit..load()),
+        BlocProvider(create: (_) => di.ordersCubit..startRealtime()),
         BlocProvider(create: (_) => di.settingsCubit..load()),
         BlocProvider(create: (_) => di.shippingCubit),
+        BlocProvider(create: (_) => di.couponsCubit),
       ],
-      child: const _LayoutView(),
+      child: BlocListener<AuthCubit, AuthState>(
+        listenWhen: (prev, curr) => curr.status == AuthStatus.unauthenticated && prev.status != AuthStatus.unauthenticated,
+        listener: (context, _) {
+          Navigator.of(context).pushNamedAndRemoveUntil(LoginScreen.routeName, (_) => false);
+        },
+        child: const _LayoutView(),
+      ),
     );
   }
 }
@@ -57,6 +67,7 @@ class _LayoutView extends StatelessWidget {
       BannersMgmtScreen(),
       OrdersScreen(),
       ShippingMgmtScreen(),
+      DiscountsScreen(),
       SettingsScreen(),
     ];
 
@@ -69,6 +80,7 @@ class _LayoutView extends StatelessWidget {
           _NavDest(Icons.image_outlined, context.l10n.navBanners),
           _NavDest(Icons.receipt_long_outlined, context.l10n.navOrders),
           _NavDest(Icons.local_shipping_outlined, context.l10n.navShipping),
+          _NavDest(Icons.local_offer_outlined, context.l10n.navDiscounts),
           _NavDest(Icons.settings_outlined, context.l10n.navSettings),
         ];
 
@@ -185,6 +197,27 @@ class _SideNavContent extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           child: Column(
             children: [
+              BlocBuilder<AuthCubit, AuthState>(
+                builder: (context, auth) => auth.user != null
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.admin_panel_settings_outlined,
+                                size: 16, color: AppColors.primaryLight),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                auth.user!.email,
+                                style: AppTextStyles.bodySmall.copyWith(color: Colors.white70),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+              ),
               TextButton.icon(
                 onPressed: () => context.read<LocaleCubit>().toggle(),
                 icon: const Icon(Icons.language, color: AppColors.primaryLight, size: 18),
