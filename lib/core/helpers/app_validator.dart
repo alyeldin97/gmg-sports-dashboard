@@ -5,8 +5,8 @@ class AppValidator {
       (value == null || value.trim().isEmpty) ? 'Required' : null;
 
   static String? email(String? value) {
-    if (value == null || value.isEmpty) return 'Required';
-    if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(value)) return 'Invalid email';
+    if (value == null || value.trim().isEmpty) return 'Required';
+    if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(value.trim())) return 'Invalid email';
     return null;
   }
 
