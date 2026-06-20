@@ -1,7 +1,13 @@
+import 'dart:async';
+import 'dart:convert';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:js' as js;
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/helpers/app_validator.dart';
 import '../../../../core/localization/l10n_extension.dart';
@@ -142,6 +148,10 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                   images: _images,
                   onChanged: (urls) => setState(() => _images = urls),
                 ),
+                if (widget.product != null && widget.product!.id.isNotEmpty) ...[
+                  const SizedBox(height: 16),
+                  _StockHistorySection(productId: widget.product!.id),
+                ],
                 const SizedBox(height: 16),
                 Row(
                   children: [
@@ -277,13 +287,38 @@ class _ImagePickerSectionState extends State<_ImagePickerSection> {
   bool get _uploading => _uploadingCount > 0;
 
   Future<void> _pickFromDialog() async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-      withData: true,
-      allowMultiple: true,
-    );
-    if (result == null || result.files.isEmpty) return;
-    await _uploadFiles(result.files);
+    if (_uploading) return;
+    // Use a native <input type="file"> via window.gmgPickImages (defined in
+    // index.html). This keeps the synchronous trusted-user-gesture chain that
+    // the browser requires to open the file dialog — something that
+    // FilePicker.platform.pickFiles() breaks by going through an async
+    // platform channel before calling input.click().
+    final completer = Completer<List<PlatformFile>>();
+    js.context.callMethod('gmgPickImages', [
+      js.allowInterop((String jsonStr) {
+        try {
+          final items = (jsonDecode(jsonStr) as List).cast<Map<String, dynamic>>();
+          final files = items
+              .where((m) => (m['dataUrl'] as String).isNotEmpty)
+              .map((m) {
+                final dataUrl = m['dataUrl'] as String;
+                final bytes = base64Decode(dataUrl.split(',').last);
+                return PlatformFile(
+                  name: m['name'] as String,
+                  size: m['size'] as int,
+                  bytes: bytes,
+                );
+              })
+              .toList();
+          completer.complete(files);
+        } catch (e) {
+          completer.complete([]);
+        }
+      }),
+    ]);
+    final files = await completer.future;
+    if (files.isEmpty || !mounted) return;
+    await _uploadFiles(files);
   }
 
   /// Validates a single file. Returns an error message key text, or null if ok.
@@ -471,6 +506,153 @@ class _ImageThumb extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+// ─── Stock history (expandable) ───────────────────────────────────────────────
+
+class _StockHistorySection extends StatefulWidget {
+  const _StockHistorySection({required this.productId});
+  final String productId;
+
+  @override
+  State<_StockHistorySection> createState() => _StockHistorySectionState();
+}
+
+class _StockHistorySectionState extends State<_StockHistorySection> {
+  bool _expanded = false;
+  bool _loading = false;
+  String? _error;
+  List<Map<String, dynamic>> _movements = [];
+
+  Future<void> _loadIfNeeded() async {
+    if (_loading || _movements.isNotEmpty) return;
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      final rows = await Supabase.instance.client
+          .from('stock_movements')
+          .select()
+          .eq('product_id', widget.productId)
+          .order('created_at', ascending: false)
+          .limit(10);
+      if (!mounted) return;
+      setState(() {
+        _movements = (rows as List).cast<Map<String, dynamic>>();
+        _loading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      // Table may not exist yet — degrade gracefully.
+      setState(() {
+        _error = e.toString();
+        _loading = false;
+      });
+    }
+  }
+
+  String _reasonLabel(String reason) => switch (reason) {
+        'restock' => context.l10n.restock,
+        'manual_adjustment' => context.l10n.manualAdjustment,
+        'damage' => context.l10n.damageOrLoss,
+        'return' => context.l10n.returnReason,
+        'sale' => context.l10n.navOrders,
+        _ => reason,
+      };
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+          childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+          leading: const Icon(Icons.history, color: AppColors.primaryDark),
+          title: Text(context.l10n.stockMovements, style: AppTextStyles.label),
+          onExpansionChanged: (v) {
+            setState(() => _expanded = v);
+            if (v) _loadIfNeeded();
+          },
+          children: [
+            if (_loading)
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: Center(child: CircularProgressIndicator(color: AppColors.primaryDark)),
+              )
+            else if (_error != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(context.l10n.noStockHistory, style: AppTextStyles.bodySmall),
+              )
+            else if (_movements.isEmpty && _expanded)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(context.l10n.noStockHistory, style: AppTextStyles.bodySmall),
+              )
+            else
+              for (final m in _movements) _MovementRow(movement: m, reasonLabel: _reasonLabel),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MovementRow extends StatelessWidget {
+  const _MovementRow({required this.movement, required this.reasonLabel});
+  final Map<String, dynamic> movement;
+  final String Function(String) reasonLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    final change = (movement['quantity_change'] as num?)?.toInt() ?? 0;
+    final positive = change >= 0;
+    final color = positive ? AppColors.accentGreen : AppColors.error;
+    final reason = movement['reason'] as String? ?? '';
+    final notes = movement['notes'] as String?;
+    final createdAt = DateTime.tryParse(movement['created_at'] as String? ?? '');
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 92,
+            child: Text(
+              createdAt != null ? DateFormat('d MMM, HH:mm').format(createdAt) : '—',
+              style: AppTextStyles.bodySmall,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+            decoration: BoxDecoration(
+              color: AppColors.primaryMist,
+              borderRadius: BorderRadius.circular(999),
+            ),
+            child: Text(reasonLabel(reason),
+                style: AppTextStyles.bodySmall.copyWith(fontWeight: FontWeight.w700)),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(notes ?? '',
+                style: AppTextStyles.bodySmall, overflow: TextOverflow.ellipsis),
+          ),
+          Text(
+            '${positive ? '+' : ''}$change',
+            style: AppTextStyles.subtitle.copyWith(color: color, fontWeight: FontWeight.w800),
+          ),
+        ],
+      ),
     );
   }
 }

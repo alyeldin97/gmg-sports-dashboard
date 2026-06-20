@@ -7,6 +7,7 @@ import '../../../../core/navigation/navigation_cubit.dart';
 import '../../../../core/styling/colors.dart';
 import '../../../../core/styling/text_styles.dart';
 import '../../../auth/presentation/cubits/auth_cubit.dart';
+import '../../../analytics/presentation/screens/analytics_screen.dart';
 import '../../../auth/presentation/screens/login_screen.dart';
 import '../../../banners/presentation/screens/banners_mgmt_screen.dart';
 import '../../../collections/presentation/screens/collections_mgmt_screen.dart';
@@ -36,6 +37,7 @@ class LayoutScreen extends StatelessWidget {
         BlocProvider(create: (_) => di.shippingCubit),
         BlocProvider(create: (_) => di.couponsCubit),
         BlocProvider(create: (_) => di.dashboardStatsCubit..load()),
+        BlocProvider(create: (_) => di.analyticsCubit..loadForToday()),
       ],
       child: BlocListener<AuthCubit, AuthState>(
         listenWhen: (prev, curr) => curr.status == AuthStatus.unauthenticated && prev.status != AuthStatus.unauthenticated,
@@ -70,6 +72,7 @@ class _LayoutView extends StatelessWidget {
       ShippingMgmtScreen(),
       DiscountsScreen(),
       SettingsScreen(),
+      AnalyticsScreen(),
     ];
 
     return BlocBuilder<NavigationCubit, int>(
@@ -83,6 +86,7 @@ class _LayoutView extends StatelessWidget {
           _NavDest(Icons.local_shipping_outlined, context.l10n.navShipping),
           _NavDest(Icons.local_offer_outlined, context.l10n.navDiscounts),
           _NavDest(Icons.settings_outlined, context.l10n.navSettings),
+          _NavDest(Icons.insights_outlined, context.l10n.navAnalytics),
         ];
 
         final width = MediaQuery.of(context).size.width;

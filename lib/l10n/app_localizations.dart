@@ -1171,6 +1171,168 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Image is too large (max 5MB)'**
   String get imageTooLarge;
+
+  /// No description provided for @navAnalytics.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics'**
+  String get navAnalytics;
+
+  /// No description provided for @analyticsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales Analytics'**
+  String get analyticsTitle;
+
+  /// No description provided for @today.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
+
+  /// No description provided for @yesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get yesterday;
+
+  /// No description provided for @last7Days.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 7 Days'**
+  String get last7Days;
+
+  /// No description provided for @thisMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'This Month'**
+  String get thisMonth;
+
+  /// No description provided for @customRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Range'**
+  String get customRange;
+
+  /// No description provided for @totalRevenue.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Revenue'**
+  String get totalRevenue;
+
+  /// No description provided for @avgOrderValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg. Order Value'**
+  String get avgOrderValue;
+
+  /// No description provided for @uniqueCustomers.
+  ///
+  /// In en, this message translates to:
+  /// **'Customers'**
+  String get uniqueCustomers;
+
+  /// No description provided for @revenueTrend.
+  ///
+  /// In en, this message translates to:
+  /// **'Revenue Trend'**
+  String get revenueTrend;
+
+  /// No description provided for @vsLastPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'vs previous period'**
+  String get vsLastPeriod;
+
+  /// No description provided for @noAnalyticsData.
+  ///
+  /// In en, this message translates to:
+  /// **'No data for this period'**
+  String get noAnalyticsData;
+
+  /// No description provided for @selectDateRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Select date range'**
+  String get selectDateRange;
+
+  /// No description provided for @stockMovements.
+  ///
+  /// In en, this message translates to:
+  /// **'Stock History'**
+  String get stockMovements;
+
+  /// No description provided for @adjustStock.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust Stock'**
+  String get adjustStock;
+
+  /// No description provided for @quantityChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity change'**
+  String get quantityChange;
+
+  /// No description provided for @reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason'**
+  String get reason;
+
+  /// No description provided for @restock.
+  ///
+  /// In en, this message translates to:
+  /// **'Restock'**
+  String get restock;
+
+  /// No description provided for @manualAdjustment.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjustment'**
+  String get manualAdjustment;
+
+  /// No description provided for @damageOrLoss.
+  ///
+  /// In en, this message translates to:
+  /// **'Damage / Loss'**
+  String get damageOrLoss;
+
+  /// No description provided for @returnReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Return'**
+  String get returnReason;
+
+  /// No description provided for @stockAdjusted.
+  ///
+  /// In en, this message translates to:
+  /// **'Stock adjusted'**
+  String get stockAdjusted;
+
+  /// No description provided for @notes.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get notes;
+
+  /// No description provided for @currentStock.
+  ///
+  /// In en, this message translates to:
+  /// **'Current stock'**
+  String get currentStock;
+
+  /// No description provided for @unitsSold.
+  ///
+  /// In en, this message translates to:
+  /// **'Units sold'**
+  String get unitsSold;
+
+  /// No description provided for @noStockHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'No stock movements yet'**
+  String get noStockHistory;
 }
 
 class _AppLocalizationsDelegate

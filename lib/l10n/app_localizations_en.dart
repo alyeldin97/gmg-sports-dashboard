@@ -557,4 +557,85 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get imageTooLarge => 'Image is too large (max 5MB)';
+
+  @override
+  String get navAnalytics => 'Analytics';
+
+  @override
+  String get analyticsTitle => 'Sales Analytics';
+
+  @override
+  String get today => 'Today';
+
+  @override
+  String get yesterday => 'Yesterday';
+
+  @override
+  String get last7Days => 'Last 7 Days';
+
+  @override
+  String get thisMonth => 'This Month';
+
+  @override
+  String get customRange => 'Custom Range';
+
+  @override
+  String get totalRevenue => 'Total Revenue';
+
+  @override
+  String get avgOrderValue => 'Avg. Order Value';
+
+  @override
+  String get uniqueCustomers => 'Customers';
+
+  @override
+  String get revenueTrend => 'Revenue Trend';
+
+  @override
+  String get vsLastPeriod => 'vs previous period';
+
+  @override
+  String get noAnalyticsData => 'No data for this period';
+
+  @override
+  String get selectDateRange => 'Select date range';
+
+  @override
+  String get stockMovements => 'Stock History';
+
+  @override
+  String get adjustStock => 'Adjust Stock';
+
+  @override
+  String get quantityChange => 'Quantity change';
+
+  @override
+  String get reason => 'Reason';
+
+  @override
+  String get restock => 'Restock';
+
+  @override
+  String get manualAdjustment => 'Adjustment';
+
+  @override
+  String get damageOrLoss => 'Damage / Loss';
+
+  @override
+  String get returnReason => 'Return';
+
+  @override
+  String get stockAdjusted => 'Stock adjusted';
+
+  @override
+  String get notes => 'Notes';
+
+  @override
+  String get currentStock => 'Current stock';
+
+  @override
+  String get unitsSold => 'Units sold';
+
+  @override
+  String get noStockHistory => 'No stock movements yet';
 }

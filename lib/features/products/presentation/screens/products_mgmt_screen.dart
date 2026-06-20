@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/extensions/price_x.dart';
 import '../../../../core/localization/l10n_extension.dart';
 import '../../../../core/styling/colors.dart';
@@ -298,6 +299,17 @@ class _ProductRow extends StatelessWidget {
   final VoidCallback onLongPress;
   final ValueChanged<bool> onToggleSelect;
 
+  void _openStockDialog(BuildContext context) {
+    final cubit = context.read<ProductsCubit>();
+    showDialog(
+      context: context,
+      builder: (_) => BlocProvider.value(
+        value: cubit,
+        child: _StockAdjustmentDialog(product: product),
+      ),
+    );
+  }
+
   void _confirmDelete(BuildContext context) {
     final cubit = context.read<ProductsCubit>();
     showDialog(
@@ -355,7 +367,12 @@ class _ProductRow extends StatelessWidget {
               ),
             ),
             Expanded(child: Text('${product.price.asPrice} ${context.l10n.currency}', style: AppTextStyles.price)),
-            Expanded(child: Text('${context.l10n.stock}: ${product.stock}', style: AppTextStyles.bodySmall)),
+            Expanded(child: _StockBadge(stock: product.stock)),
+            IconButton(
+              icon: const Icon(Icons.tune, size: 18),
+              tooltip: context.l10n.adjustStock,
+              onPressed: () => _openStockDialog(context),
+            ),
             if (product.isFeatured)
               const Padding(
                 padding: EdgeInsets.only(right: 8),
@@ -412,6 +429,206 @@ class _Badge extends StatelessWidget {
       decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(999)),
       child: Text(active ? context.l10n.active : context.l10n.inactive,
           style: AppTextStyles.bodySmall.copyWith(color: color, fontWeight: FontWeight.w700)),
+    );
+  }
+}
+
+// ─── Stock badge (color by level) ─────────────────────────────────────────────
+
+Color stockColor(int stock) {
+  if (stock <= 0) return AppColors.error;
+  if (stock < 10) return AppColors.accentOrange;
+  return AppColors.accentGreen;
+}
+
+class _StockBadge extends StatelessWidget {
+  const _StockBadge({required this.stock});
+  final int stock;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = stockColor(stock);
+    return Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(999),
+        ),
+        child: Text('${context.l10n.stock}: $stock',
+            style: AppTextStyles.bodySmall.copyWith(color: color, fontWeight: FontWeight.w700)),
+      ),
+    );
+  }
+}
+
+// ─── Stock adjustment dialog ──────────────────────────────────────────────────
+
+enum _StockReason { restock, manualAdjustment, damage, returned }
+
+extension _StockReasonX on _StockReason {
+  String get dbValue => switch (this) {
+        _StockReason.restock => 'restock',
+        _StockReason.manualAdjustment => 'manual_adjustment',
+        _StockReason.damage => 'damage',
+        _StockReason.returned => 'return',
+      };
+
+  String label(BuildContext context) => switch (this) {
+        _StockReason.restock => context.l10n.restock,
+        _StockReason.manualAdjustment => context.l10n.manualAdjustment,
+        _StockReason.damage => context.l10n.damageOrLoss,
+        _StockReason.returned => context.l10n.returnReason,
+      };
+}
+
+class _StockAdjustmentDialog extends StatefulWidget {
+  const _StockAdjustmentDialog({required this.product});
+  final Product product;
+
+  @override
+  State<_StockAdjustmentDialog> createState() => _StockAdjustmentDialogState();
+}
+
+class _StockAdjustmentDialogState extends State<_StockAdjustmentDialog> {
+  _StockReason _reason = _StockReason.restock;
+  final _qtyCtrl = TextEditingController(text: '0');
+  final _notesCtrl = TextEditingController();
+  bool _saving = false;
+
+  int get _delta => int.tryParse(_qtyCtrl.text.trim()) ?? 0;
+  int get _newStock => (widget.product.stock + _delta).clamp(0, 1 << 31);
+
+  @override
+  void dispose() {
+    _qtyCtrl.dispose();
+    _notesCtrl.dispose();
+    super.dispose();
+  }
+
+  void _bump(int by) {
+    setState(() => _qtyCtrl.text = '${_delta + by}');
+  }
+
+  Future<void> _confirm() async {
+    final delta = _delta;
+    if (delta == 0) {
+      Navigator.of(context).pop();
+      return;
+    }
+    final cubit = context.read<ProductsCubit>();
+    final messenger = ScaffoldMessenger.of(context);
+    final successText = context.l10n.stockAdjusted;
+    final failText = context.l10n.failedToUpdate;
+    setState(() => _saving = true);
+    final client = Supabase.instance.client;
+    final newStock = _newStock;
+    try {
+      await client.from('stock_movements').insert({
+        'product_id': widget.product.id,
+        'quantity_change': delta,
+        'reason': _reason.dbValue,
+        'notes': _notesCtrl.text.trim().isEmpty ? null : _notesCtrl.text.trim(),
+        'created_by': client.auth.currentUser?.email,
+      });
+      await client.from('products').update({'stock': newStock}).eq('id', widget.product.id);
+      cubit.updateStock(widget.product.id, newStock);
+      if (!mounted) return;
+      Navigator.of(context).pop();
+      messenger.showSnackBar(SnackBar(content: Text(successText)));
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _saving = false);
+      messenger.showSnackBar(SnackBar(content: Text('$failText: $e')));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('${context.l10n.adjustStock} — ${widget.product.name}',
+          style: AppTextStyles.heading3),
+      content: SizedBox(
+        width: 360,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text('${context.l10n.currentStock}: ', style: AppTextStyles.label),
+                Text('${widget.product.stock}',
+                    style: AppTextStyles.subtitle.copyWith(color: stockColor(widget.product.stock))),
+                const Spacer(),
+                Text('→ $_newStock',
+                    style: AppTextStyles.subtitle.copyWith(color: stockColor(_newStock))),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Text(context.l10n.reason, style: AppTextStyles.label),
+            const SizedBox(height: 6),
+            DropdownButtonFormField<_StockReason>(
+              initialValue: _reason,
+              isDense: true,
+              decoration: const InputDecoration(border: OutlineInputBorder(), isDense: true),
+              items: [
+                for (final r in _StockReason.values)
+                  DropdownMenuItem(value: r, child: Text(r.label(context))),
+              ],
+              onChanged: (v) => setState(() => _reason = v ?? _StockReason.restock),
+            ),
+            const SizedBox(height: 16),
+            Text(context.l10n.quantityChange, style: AppTextStyles.label),
+            const SizedBox(height: 6),
+            Row(
+              children: [
+                IconButton.outlined(
+                  icon: const Icon(Icons.remove),
+                  onPressed: () => _bump(-1),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextField(
+                    controller: _qtyCtrl,
+                    textAlign: TextAlign.center,
+                    keyboardType: const TextInputType.numberWithOptions(signed: true),
+                    decoration: const InputDecoration(border: OutlineInputBorder(), isDense: true),
+                    onChanged: (_) => setState(() {}),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                IconButton.outlined(
+                  icon: const Icon(Icons.add),
+                  onPressed: () => _bump(1),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Text(context.l10n.notes, style: AppTextStyles.label),
+            const SizedBox(height: 6),
+            TextField(
+              controller: _notesCtrl,
+              maxLines: 2,
+              decoration: const InputDecoration(border: OutlineInputBorder(), isDense: true),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: _saving ? null : () => Navigator.of(context).pop(),
+          child: Text(context.l10n.cancel),
+        ),
+        FilledButton(
+          onPressed: _saving ? null : _confirm,
+          style: FilledButton.styleFrom(backgroundColor: AppColors.primaryDark),
+          child: _saving
+              ? const SizedBox(
+                  width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+              : Text(context.l10n.save, style: const TextStyle(color: AppColors.ink)),
+        ),
+      ],
     );
   }
 }

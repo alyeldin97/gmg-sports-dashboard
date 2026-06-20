@@ -556,4 +556,85 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get imageTooLarge => 'حجم الصورة كبير جدًا (الحد الأقصى 5 ميجابايت)';
+
+  @override
+  String get navAnalytics => 'التحليلات';
+
+  @override
+  String get analyticsTitle => 'تحليلات المبيعات';
+
+  @override
+  String get today => 'اليوم';
+
+  @override
+  String get yesterday => 'أمس';
+
+  @override
+  String get last7Days => 'آخر 7 أيام';
+
+  @override
+  String get thisMonth => 'هذا الشهر';
+
+  @override
+  String get customRange => 'نطاق مخصص';
+
+  @override
+  String get totalRevenue => 'إجمالي الإيرادات';
+
+  @override
+  String get avgOrderValue => 'متوسط قيمة الطلب';
+
+  @override
+  String get uniqueCustomers => 'العملاء';
+
+  @override
+  String get revenueTrend => 'اتجاه الإيرادات';
+
+  @override
+  String get vsLastPeriod => 'مقارنة بالفترة السابقة';
+
+  @override
+  String get noAnalyticsData => 'لا توجد بيانات لهذه الفترة';
+
+  @override
+  String get selectDateRange => 'اختر نطاق التاريخ';
+
+  @override
+  String get stockMovements => 'سجل المخزون';
+
+  @override
+  String get adjustStock => 'تعديل المخزون';
+
+  @override
+  String get quantityChange => 'تغيير الكمية';
+
+  @override
+  String get reason => 'السبب';
+
+  @override
+  String get restock => 'إعادة تخزين';
+
+  @override
+  String get manualAdjustment => 'تعديل يدوي';
+
+  @override
+  String get damageOrLoss => 'تلف / خسارة';
+
+  @override
+  String get returnReason => 'إرجاع';
+
+  @override
+  String get stockAdjusted => 'تم تعديل المخزون';
+
+  @override
+  String get notes => 'ملاحظات';
+
+  @override
+  String get currentStock => 'المخزون الحالي';
+
+  @override
+  String get unitsSold => 'الوحدات المباعة';
+
+  @override
+  String get noStockHistory => 'لا توجد حركات مخزون بعد';
 }

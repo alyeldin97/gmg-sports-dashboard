@@ -4,6 +4,7 @@ import '../../features/auth/data/remote/auth_data_source.dart';
 import '../../features/auth/data/remote/impl/supabase_auth_data_source.dart';
 import '../../features/auth/data/repo/auth_repository.dart';
 import '../../features/auth/presentation/cubits/auth_cubit.dart';
+import '../../features/analytics/presentation/cubits/analytics_cubit.dart';
 import '../../features/banners/data/remote/banners_data_source.dart';
 import '../../features/banners/data/repo/banners_repository.dart';
 import '../../features/banners/presentation/cubits/banners_cubit.dart';
@@ -90,6 +91,9 @@ class DependencyInjector {
 
   // Dashboard stats (overview analytics)
   DashboardStatsCubit get dashboardStatsCubit => DashboardStatsCubit(_supabase);
+
+  // Analytics (date-range sales analytics)
+  AnalyticsCubit get analyticsCubit => AnalyticsCubit();
 
   // Navigation
   NavigationCubit get navigationCubit => _deps[NavigationCubit] ??= NavigationCubit();

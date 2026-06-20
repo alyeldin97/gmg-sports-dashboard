@@ -92,6 +92,15 @@ class ProductsCubit extends Cubit<ProductsState> {
     }
   }
 
+  /// Updates the in-memory stock for [productId] after a stock adjustment so
+  /// the list reflects the new value without a full reload.
+  void updateStock(String productId, int newStock) {
+    final updated = state.products
+        .map((p) => p.id == productId ? p.copyWith(stock: newStock) : p)
+        .toList();
+    emit(state.copyWith(products: updated));
+  }
+
   Future<bool> bulkToggleActive(List<String> ids, bool active) async {
     try {
       for (final id in ids) {
