@@ -67,26 +67,27 @@ class DashboardStatsCubit extends Cubit<DashboardStatsState> {
   Future<void> load() async {
     emit(state.copyWith(isLoading: true, error: null));
     try {
+      final now = DateTime.now();
+      final todayStart = DateTime(now.year, now.month, now.day);
+      final tomorrowStart = todayStart.add(const Duration(days: 1));
+
       final rows = await _client
           .from('orders')
           .select('*, order_items(*)')
+          .gte('created_at', todayStart.toIso8601String())
+          .lt('created_at', tomorrowStart.toIso8601String())
           .order('created_at', ascending: false);
 
       final orders = (rows as List)
           .map((e) => Order.fromJson(e as Map<String, dynamic>))
           .toList();
 
-      final now = DateTime.now();
-      final monthStart = DateTime(now.year, now.month, 1);
-
-      // Revenue this month (exclude cancelled)
+      // Today's revenue (exclude cancelled)
       final monthRevenue = orders
-          .where((o) =>
-              o.status != OrderStatus.cancelled &&
-              !o.createdAt.isBefore(monthStart))
+          .where((o) => o.status != OrderStatus.cancelled)
           .fold<double>(0, (sum, o) => sum + o.total);
 
-      // Orders grouped by status
+      // Orders grouped by status (today only)
       final byStatus = <String, int>{};
       for (final s in OrderStatus.values) {
         byStatus[s.name] = 0;
@@ -97,20 +98,10 @@ class DashboardStatsCubit extends Cubit<DashboardStatsState> {
 
       final pendingOrders = byStatus[OrderStatus.pending.name] ?? 0;
 
-      // Revenue by day for the last 7 days (oldest -> newest)
-      final revenueByDay = <MapEntry<DateTime, double>>[];
-      final today = DateTime(now.year, now.month, now.day);
-      for (var i = 6; i >= 0; i--) {
-        final day = today.subtract(Duration(days: i));
-        final next = day.add(const Duration(days: 1));
-        final dayRevenue = orders
-            .where((o) =>
-                o.status != OrderStatus.cancelled &&
-                !o.createdAt.isBefore(day) &&
-                o.createdAt.isBefore(next))
-            .fold<double>(0, (sum, o) => sum + o.total);
-        revenueByDay.add(MapEntry(day, dayRevenue));
-      }
+      // Revenue for today (single point in the trend).
+      final revenueByDay = <MapEntry<DateTime, double>>[
+        MapEntry(todayStart, monthRevenue),
+      ];
 
       emit(state.copyWith(
         isLoading: false,

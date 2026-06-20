@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:js' as js;
+import 'dart:ui' as ui;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
@@ -45,8 +46,13 @@ class _VariantRow {
   }
 }
 
-class _ProductFormScreenState extends State<ProductFormScreen> {
+enum _VType { size, color, weight, custom }
+
+class _ProductFormScreenState extends State<ProductFormScreen>
+    with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
+  late final TabController _tabCtrl = TabController(length: 2, vsync: this);
+  _VType _variantType = _VType.size;
   late final _name = TextEditingController(text: widget.product?.name);
   late final _nameAr = TextEditingController(text: widget.product?.nameAr);
   late final _desc = TextEditingController(text: widget.product?.description);
@@ -65,6 +71,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
   @override
   void dispose() {
+    _tabCtrl.dispose();
     for (final c in [_name, _nameAr, _desc, _descAr, _price, _compareAt, _stock]) {
       c.dispose();
     }
@@ -129,14 +136,41 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
             child: ListView(
               padding: const EdgeInsets.all(24),
               children: [
-                _row([
-                  AppTextField(label: context.l10n.name, controller: _name, validator: AppValidator.required),
-                  AppTextField(label: context.l10n.nameAr, controller: _nameAr),
-                ]),
+                TabBar(
+                  controller: _tabCtrl,
+                  tabs: const [Tab(text: 'English'), Tab(text: 'العربية')],
+                  labelColor: AppColors.primaryDark,
+                  unselectedLabelColor: AppColors.textMid,
+                  indicatorColor: AppColors.primaryDark,
+                ),
                 const SizedBox(height: 16),
-                AppTextField(label: context.l10n.description, controller: _desc, maxLines: 3),
-                const SizedBox(height: 16),
-                AppTextField(label: context.l10n.descriptionAr, controller: _descAr, maxLines: 3),
+                ListenableBuilder(
+                  listenable: _tabCtrl,
+                  builder: (context, _) {
+                    final isAr = _tabCtrl.index == 1;
+                    return Column(
+                      children: [
+                        Directionality(
+                          textDirection: isAr ? ui.TextDirection.rtl : ui.TextDirection.ltr,
+                          child: AppTextField(
+                            label: isAr ? context.l10n.nameAr : context.l10n.name,
+                            controller: isAr ? _nameAr : _name,
+                            validator: isAr ? null : AppValidator.required,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Directionality(
+                          textDirection: isAr ? ui.TextDirection.rtl : ui.TextDirection.ltr,
+                          child: AppTextField(
+                            label: isAr ? context.l10n.descriptionAr : context.l10n.description,
+                            controller: isAr ? _descAr : _desc,
+                            maxLines: 3,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
                 const SizedBox(height: 16),
                 _row([
                   AppTextField(label: context.l10n.price, controller: _price, validator: AppValidator.number, keyboardType: TextInputType.number),
@@ -212,6 +246,18 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  children: _VType.values
+                      .map((t) => ChoiceChip(
+                            label: Text(_vtypeLabel(t)),
+                            selected: _variantType == t,
+                            selectedColor: AppColors.primaryLight,
+                            onSelected: (_) => setState(() => _variantType = t),
+                          ))
+                      .toList(),
+                ),
                 ..._variants.asMap().entries.map((e) => _variantRow(e.key, e.value)),
                 const SizedBox(height: 24),
                 BlocBuilder<ProductsCubit, ProductsState>(
@@ -231,26 +277,60 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   }
 
   Widget _variantRow(int index, _VariantRow v) {
+    final suggestions = _suggestionsFor(_variantType);
     return Padding(
       padding: const EdgeInsets.only(top: 10),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(flex: 3, child: AppTextField(label: context.l10n.variantName, controller: v.name)),
-          const SizedBox(width: 10),
-          Expanded(flex: 2, child: AppTextField(label: context.l10n.price, controller: v.price, keyboardType: TextInputType.number, validator: AppValidator.optionalNumber)),
-          const SizedBox(width: 10),
-          Expanded(flex: 2, child: AppTextField(label: context.l10n.stock, controller: v.stock, keyboardType: TextInputType.number, validator: AppValidator.optionalNumber)),
-          IconButton(
-            icon: const Icon(Icons.remove_circle_outline, color: AppColors.error),
-            onPressed: () => setState(() {
-              _variants.removeAt(index).dispose();
-            }),
+          if (suggestions.isNotEmpty) ...[
+            Wrap(
+              spacing: 6,
+              runSpacing: 4,
+              children: suggestions
+                  .map((s) => ActionChip(
+                        label: Text(s, style: const TextStyle(fontSize: 12)),
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        onPressed: () => setState(() => v.name.text = s),
+                      ))
+                  .toList(),
+            ),
+            const SizedBox(height: 6),
+          ],
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(flex: 3, child: AppTextField(label: context.l10n.variantName, controller: v.name)),
+              const SizedBox(width: 10),
+              Expanded(flex: 2, child: AppTextField(label: context.l10n.price, controller: v.price, keyboardType: TextInputType.number, validator: AppValidator.optionalNumber)),
+              const SizedBox(width: 10),
+              Expanded(flex: 2, child: AppTextField(label: context.l10n.stock, controller: v.stock, keyboardType: TextInputType.number, validator: AppValidator.optionalNumber)),
+              IconButton(
+                icon: const Icon(Icons.remove_circle_outline, color: AppColors.error),
+                onPressed: () => setState(() {
+                  _variants.removeAt(index).dispose();
+                }),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
+
+  List<String> _suggestionsFor(_VType type) => switch (type) {
+        _VType.size => ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'],
+        _VType.color => ['Black', 'White', 'Red', 'Blue', 'Green', 'Navy', 'Grey', 'Yellow', 'Pink'],
+        _VType.weight => ['250g', '500g', '1kg', '2kg', '5kg', '10kg'],
+        _VType.custom => <String>[],
+      };
+
+  String _vtypeLabel(_VType t) => switch (t) {
+        _VType.size => 'Size',
+        _VType.color => 'Color',
+        _VType.weight => 'Weight',
+        _VType.custom => 'Custom',
+      };
 
   Widget _row(List<Widget> children) {
     return Row(
