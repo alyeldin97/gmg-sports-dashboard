@@ -463,4 +463,97 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get adminEmail => 'البريد الإلكتروني للمسؤول';
+
+  @override
+  String get rememberMe => 'تذكّرني';
+
+  @override
+  String get integrations => 'التكاملات';
+
+  @override
+  String get metaPixelId => 'معرّف Meta Pixel';
+
+  @override
+  String get metaPixelIdHint => 'مثال: 1234567890123456';
+
+  @override
+  String get metaPixelIdDesc =>
+      'أدخل معرّف Meta Pixel الخاص بك لتتبع تحويلات الإعلانات. اتركه فارغًا لتعطيله.';
+
+  @override
+  String get freeShippingRule => 'قاعدة الشحن المجاني';
+
+  @override
+  String get freeShippingThreshold => 'الحد الأدنى للطلب للشحن المجاني (ج.م)';
+
+  @override
+  String freeShippingThresholdValue(Object amount) {
+    return 'شحن مجاني للطلبات التي تزيد عن $amount ج.م';
+  }
+
+  @override
+  String get disabled => 'معطّل';
+
+  @override
+  String get couponCodes => 'أكواد الخصم';
+
+  @override
+  String get productImages => 'صور المنتج';
+
+  @override
+  String get uploadImages => 'رفع صور';
+
+  @override
+  String get uploading => 'جارٍ الرفع…';
+
+  @override
+  String get monthRevenue => 'إيرادات الشهر';
+
+  @override
+  String get lowStockAlert => 'تنبيه نقص المخزون';
+
+  @override
+  String get topProducts => 'أفضل المنتجات';
+
+  @override
+  String get salesTrend => 'اتجاه المبيعات (آخر 7 أيام)';
+
+  @override
+  String get ordersByStatus => 'الطلبات حسب الحالة';
+
+  @override
+  String get quickActions => 'إجراءات سريعة';
+
+  @override
+  String get addProduct => 'إضافة منتج';
+
+  @override
+  String get addCoupon => 'إضافة كوبون';
+
+  @override
+  String stockLeft(Object count) {
+    return 'تبقى $count';
+  }
+
+  @override
+  String get noLowStock => 'جميع المنتجات متوفرة';
+
+  @override
+  String get viewAll => 'عرض الكل';
+
+  @override
+  String get customer => 'العميل';
+
+  @override
+  String get noData => 'لا توجد بيانات بعد';
+
+  @override
+  String get dropImagesHere => 'أفلت الصور هنا أو انقر للرفع';
+
+  @override
+  String get invalidImageType =>
+      'نوع الملف غير صالح. المسموح: jpg, jpeg, png, webp, gif';
+
+  @override
+  String get imageTooLarge => 'حجم الصورة كبير جدًا (الحد الأقصى 5 ميجابايت)';
 }

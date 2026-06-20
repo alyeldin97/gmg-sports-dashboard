@@ -10,6 +10,7 @@ import '../../features/banners/presentation/cubits/banners_cubit.dart';
 import '../../features/collections/data/remote/collections_data_source.dart';
 import '../../features/collections/data/repo/collections_repository.dart';
 import '../../features/collections/presentation/cubits/collections_cubit.dart';
+import '../../features/dashboard_home/presentation/cubits/dashboard_stats_cubit.dart';
 import '../../features/orders/data/remote/orders_data_source.dart';
 import '../../features/orders/data/repo/orders_repository.dart';
 import '../../features/orders/presentation/cubits/orders_cubit.dart';
@@ -86,6 +87,9 @@ class DependencyInjector {
   CouponsRepository get couponsRepository =>
       _deps[CouponsRepository] ??= CouponsRepository(couponsDataSource);
   CouponsCubit get couponsCubit => CouponsCubit(couponsRepository);
+
+  // Dashboard stats (overview analytics)
+  DashboardStatsCubit get dashboardStatsCubit => DashboardStatsCubit(_supabase);
 
   // Navigation
   NavigationCubit get navigationCubit => _deps[NavigationCubit] ??= NavigationCubit();

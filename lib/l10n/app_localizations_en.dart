@@ -464,4 +464,97 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adminEmail => 'Admin email';
+
+  @override
+  String get rememberMe => 'Remember me';
+
+  @override
+  String get integrations => 'Integrations';
+
+  @override
+  String get metaPixelId => 'Meta Pixel ID';
+
+  @override
+  String get metaPixelIdHint => 'e.g. 1234567890123456';
+
+  @override
+  String get metaPixelIdDesc =>
+      'Enter your Meta (Facebook) Pixel ID to track ad conversions. Leave empty to disable.';
+
+  @override
+  String get freeShippingRule => 'Free shipping rule';
+
+  @override
+  String get freeShippingThreshold => 'Min. order for free shipping (EGP)';
+
+  @override
+  String freeShippingThresholdValue(Object amount) {
+    return 'Free shipping on orders over $amount EGP';
+  }
+
+  @override
+  String get disabled => 'Disabled';
+
+  @override
+  String get couponCodes => 'Coupon codes';
+
+  @override
+  String get productImages => 'Product images';
+
+  @override
+  String get uploadImages => 'Upload images';
+
+  @override
+  String get uploading => 'Uploading…';
+
+  @override
+  String get monthRevenue => 'This Month Revenue';
+
+  @override
+  String get lowStockAlert => 'Low Stock Alert';
+
+  @override
+  String get topProducts => 'Top Products';
+
+  @override
+  String get salesTrend => 'Sales Trend (Last 7 Days)';
+
+  @override
+  String get ordersByStatus => 'Orders by Status';
+
+  @override
+  String get quickActions => 'Quick Actions';
+
+  @override
+  String get addProduct => 'Add Product';
+
+  @override
+  String get addCoupon => 'Add Coupon';
+
+  @override
+  String stockLeft(Object count) {
+    return '$count left';
+  }
+
+  @override
+  String get noLowStock => 'All products are well-stocked';
+
+  @override
+  String get viewAll => 'View all';
+
+  @override
+  String get customer => 'Customer';
+
+  @override
+  String get noData => 'No data yet';
+
+  @override
+  String get dropImagesHere => 'Drop images here or click to upload';
+
+  @override
+  String get invalidImageType =>
+      'Invalid file type. Allowed: jpg, jpeg, png, webp, gif';
+
+  @override
+  String get imageTooLarge => 'Image is too large (max 5MB)';
 }

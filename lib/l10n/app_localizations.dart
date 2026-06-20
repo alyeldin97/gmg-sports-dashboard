@@ -997,6 +997,180 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Admin email'**
   String get adminEmail;
+
+  /// No description provided for @rememberMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Remember me'**
+  String get rememberMe;
+
+  /// No description provided for @integrations.
+  ///
+  /// In en, this message translates to:
+  /// **'Integrations'**
+  String get integrations;
+
+  /// No description provided for @metaPixelId.
+  ///
+  /// In en, this message translates to:
+  /// **'Meta Pixel ID'**
+  String get metaPixelId;
+
+  /// No description provided for @metaPixelIdHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 1234567890123456'**
+  String get metaPixelIdHint;
+
+  /// No description provided for @metaPixelIdDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your Meta (Facebook) Pixel ID to track ad conversions. Leave empty to disable.'**
+  String get metaPixelIdDesc;
+
+  /// No description provided for @freeShippingRule.
+  ///
+  /// In en, this message translates to:
+  /// **'Free shipping rule'**
+  String get freeShippingRule;
+
+  /// No description provided for @freeShippingThreshold.
+  ///
+  /// In en, this message translates to:
+  /// **'Min. order for free shipping (EGP)'**
+  String get freeShippingThreshold;
+
+  /// No description provided for @freeShippingThresholdValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Free shipping on orders over {amount} EGP'**
+  String freeShippingThresholdValue(Object amount);
+
+  /// No description provided for @disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get disabled;
+
+  /// No description provided for @couponCodes.
+  ///
+  /// In en, this message translates to:
+  /// **'Coupon codes'**
+  String get couponCodes;
+
+  /// No description provided for @productImages.
+  ///
+  /// In en, this message translates to:
+  /// **'Product images'**
+  String get productImages;
+
+  /// No description provided for @uploadImages.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload images'**
+  String get uploadImages;
+
+  /// No description provided for @uploading.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading…'**
+  String get uploading;
+
+  /// No description provided for @monthRevenue.
+  ///
+  /// In en, this message translates to:
+  /// **'This Month Revenue'**
+  String get monthRevenue;
+
+  /// No description provided for @lowStockAlert.
+  ///
+  /// In en, this message translates to:
+  /// **'Low Stock Alert'**
+  String get lowStockAlert;
+
+  /// No description provided for @topProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Products'**
+  String get topProducts;
+
+  /// No description provided for @salesTrend.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales Trend (Last 7 Days)'**
+  String get salesTrend;
+
+  /// No description provided for @ordersByStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Orders by Status'**
+  String get ordersByStatus;
+
+  /// No description provided for @quickActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Actions'**
+  String get quickActions;
+
+  /// No description provided for @addProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Product'**
+  String get addProduct;
+
+  /// No description provided for @addCoupon.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Coupon'**
+  String get addCoupon;
+
+  /// No description provided for @stockLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} left'**
+  String stockLeft(Object count);
+
+  /// No description provided for @noLowStock.
+  ///
+  /// In en, this message translates to:
+  /// **'All products are well-stocked'**
+  String get noLowStock;
+
+  /// No description provided for @viewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View all'**
+  String get viewAll;
+
+  /// No description provided for @customer.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer'**
+  String get customer;
+
+  /// No description provided for @noData.
+  ///
+  /// In en, this message translates to:
+  /// **'No data yet'**
+  String get noData;
+
+  /// No description provided for @dropImagesHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop images here or click to upload'**
+  String get dropImagesHere;
+
+  /// No description provided for @invalidImageType.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid file type. Allowed: jpg, jpeg, png, webp, gif'**
+  String get invalidImageType;
+
+  /// No description provided for @imageTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Image is too large (max 5MB)'**
+  String get imageTooLarge;
 }
 
 class _AppLocalizationsDelegate

@@ -167,5 +167,45 @@
 
   "storeSettings": "Store settings",
   "accountSettings": "Account",
-  "adminEmail": "Admin email"
+  "adminEmail": "Admin email",
+
+  "rememberMe": "Remember me",
+
+  "integrations": "Integrations",
+  "metaPixelId": "Meta Pixel ID",
+  "metaPixelIdHint": "e.g. 1234567890123456",
+  "metaPixelIdDesc": "Enter your Meta (Facebook) Pixel ID to track ad conversions. Leave empty to disable.",
+
+  "freeShippingRule": "Free shipping rule",
+  "freeShippingThreshold": "Min. order for free shipping (EGP)",
+  "freeShippingThresholdValue": "Free shipping on orders over {amount} EGP",
+  "@freeShippingThresholdValue": {
+    "placeholders": {
+      "amount": { "type": "Object" }
+    }
+  },
+  "disabled": "Disabled",
+  "couponCodes": "Coupon codes",
+
+  "productImages": "Product images",
+  "uploadImages": "Upload images",
+  "uploading": "Uploading…",
+
+  "monthRevenue": "This Month Revenue",
+  "lowStockAlert": "Low Stock Alert",
+  "topProducts": "Top Products",
+  "salesTrend": "Sales Trend (Last 7 Days)",
+  "ordersByStatus": "Orders by Status",
+  "quickActions": "Quick Actions",
+  "addProduct": "Add Product",
+  "addCoupon": "Add Coupon",
+  "stockLeft": "{count} left",
+  "@stockLeft": { "placeholders": { "count": {} } },
+  "noLowStock": "All products are well-stocked",
+  "viewAll": "View all",
+  "customer": "Customer",
+  "noData": "No data yet",
+  "dropImagesHere": "Drop images here or click to upload",
+  "invalidImageType": "Invalid file type. Allowed: jpg, jpeg, png, webp, gif",
+  "imageTooLarge": "Image is too large (max 5MB)"
 }

@@ -35,6 +35,7 @@ class LayoutScreen extends StatelessWidget {
         BlocProvider(create: (_) => di.settingsCubit..load()),
         BlocProvider(create: (_) => di.shippingCubit),
         BlocProvider(create: (_) => di.couponsCubit),
+        BlocProvider(create: (_) => di.dashboardStatsCubit..load()),
       ],
       child: BlocListener<AuthCubit, AuthState>(
         listenWhen: (prev, curr) => curr.status == AuthStatus.unauthenticated && prev.status != AuthStatus.unauthenticated,

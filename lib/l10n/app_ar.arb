@@ -167,5 +167,45 @@
 
   "storeSettings": "إعدادات المتجر",
   "accountSettings": "الحساب",
-  "adminEmail": "البريد الإلكتروني للمسؤول"
+  "adminEmail": "البريد الإلكتروني للمسؤول",
+
+  "rememberMe": "تذكّرني",
+
+  "integrations": "التكاملات",
+  "metaPixelId": "معرّف Meta Pixel",
+  "metaPixelIdHint": "مثال: 1234567890123456",
+  "metaPixelIdDesc": "أدخل معرّف Meta Pixel الخاص بك لتتبع تحويلات الإعلانات. اتركه فارغًا لتعطيله.",
+
+  "freeShippingRule": "قاعدة الشحن المجاني",
+  "freeShippingThreshold": "الحد الأدنى للطلب للشحن المجاني (ج.م)",
+  "freeShippingThresholdValue": "شحن مجاني للطلبات التي تزيد عن {amount} ج.م",
+  "@freeShippingThresholdValue": {
+    "placeholders": {
+      "amount": { "type": "Object" }
+    }
+  },
+  "disabled": "معطّل",
+  "couponCodes": "أكواد الخصم",
+
+  "productImages": "صور المنتج",
+  "uploadImages": "رفع صور",
+  "uploading": "جارٍ الرفع…",
+
+  "monthRevenue": "إيرادات الشهر",
+  "lowStockAlert": "تنبيه نقص المخزون",
+  "topProducts": "أفضل المنتجات",
+  "salesTrend": "اتجاه المبيعات (آخر 7 أيام)",
+  "ordersByStatus": "الطلبات حسب الحالة",
+  "quickActions": "إجراءات سريعة",
+  "addProduct": "إضافة منتج",
+  "addCoupon": "إضافة كوبون",
+  "stockLeft": "تبقى {count}",
+  "@stockLeft": { "placeholders": { "count": {} } },
+  "noLowStock": "جميع المنتجات متوفرة",
+  "viewAll": "عرض الكل",
+  "customer": "العميل",
+  "noData": "لا توجد بيانات بعد",
+  "dropImagesHere": "أفلت الصور هنا أو انقر للرفع",
+  "invalidImageType": "نوع الملف غير صالح. المسموح: jpg, jpeg, png, webp, gif",
+  "imageTooLarge": "حجم الصورة كبير جدًا (الحد الأقصى 5 ميجابايت)"
 }
