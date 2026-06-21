@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="/gmg-sports-dashboard/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="GMG Sports — Admin Dashboard">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="GMG Sports Dashboard">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>GMG Sports Dashboard</title>
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    /* Flutter uses font-family:'MaterialIcons' (no space). The Google CDN uses
+       'Material Icons' (with space) so it never matches Flutter's lookup.
+       Load from the locally bundled OTF with the exact name Flutter expects. */
+    @font-face {
+      font-family: 'MaterialIcons';
+      font-style: normal;
+      font-weight: 400;
+      src: url('assets/fonts/MaterialIcons-Regular.otf') format('opentype');
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: sans-serif;
+    }
+
+    #loading-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+    }
+
+    #loading-screen img {
+      width: 200px;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #f0f0f0;
+      border-top-color: #FFC107;
+      border-radius: 50%;
+      opacity: 0;
+      animation: fadeIn 0.5s ease 0.3s forwards, spin 0.8s linear 0.3s infinite;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div id="loading-screen">
+    <img src="favicon.png" alt="GMG Sports" />
+    <div class="spinner"></div>
+  </div>
+
+  <script>
+    window.addEventListener('flutter-first-frame', function () {
+      var el = document.getElementById('loading-screen');
+      if (el) {
+        el.style.transition = 'opacity 0.3s ease';
+        el.style.opacity = '0';
+        setTimeout(function () { el.remove(); }, 300);
+      }
+    });
+  </script>
+
+  <!--
+    File picker helper.
+    FilePicker.platform.pickFiles() routes through a platform channel (async),
+    which breaks the browser's trusted-user-gesture chain before input.click()
+    fires — so the browser silently blocks the dialog.
+    This function is called synchronously from Dart via js.context.callMethod,
+    which IS in the trusted-gesture stack, so the dialog opens correctly.
+  -->
+  <script>
+    window.gmgPickImages = function (callback) {
+      var input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/jpeg,image/jpg,image/png,image/webp,image/gif';
+      input.multiple = true;
+      input.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none;';
+      document.body.appendChild(input);
+
+      input.addEventListener('change', function () {
+        var files = Array.from(input.files || []);
+        try { document.body.removeChild(input); } catch (e) {}
+        if (!files.length) { callback('[]'); return; }
+
+        var done = 0;
+        var results = new Array(files.length);
+        files.forEach(function (file, i) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            results[i] = {
+              name: file.name,
+              size: file.size,
+              mimeType: file.type,
+              dataUrl: e.target.result
+            };
+            if (++done === files.length) callback(JSON.stringify(results));
+          };
+          reader.onerror = function () {
+            results[i] = { name: file.name, size: file.size, mimeType: file.type, dataUrl: '' };
+            if (++done === files.length) callback(JSON.stringify(results));
+          };
+          reader.readAsDataURL(file);
+        });
+      }, { once: true });
+
+      // If the user cancels without picking, clean up after focus returns.
+      var onFocus = function () {
+        window.removeEventListener('focus', onFocus);
+        setTimeout(function () {
+          try { document.body.removeChild(input); } catch (e) {}
+          // Don't call callback — let the Dart side time out naturally.
+        }, 500);
+      };
+      window.addEventListener('focus', onFocus);
+
+      input.click(); // synchronous — trusted-gesture chain intact
+    };
+  </script>
+
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
