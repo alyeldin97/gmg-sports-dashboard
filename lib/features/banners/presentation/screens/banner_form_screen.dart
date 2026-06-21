@@ -1,11 +1,16 @@
+import 'dart:async';
+import 'dart:convert';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:js' as js;
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/helpers/app_validator.dart';
 import '../../../../core/localization/l10n_extension.dart';
 import '../../../../core/styling/colors.dart';
 import '../../../../core/styling/text_styles.dart';
 import '../../../../core/widgets/app_button.dart';
-import '../../../../core/widgets/app_network_image.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../data/model/banner_item.dart';
 import '../cubits/banners_cubit.dart';
@@ -21,15 +26,15 @@ class BannerFormDialog extends StatefulWidget {
 class _BannerFormDialogState extends State<BannerFormDialog> {
   final _formKey = GlobalKey<FormState>();
   late final _title = TextEditingController(text: widget.banner?.title);
-  late final _image = TextEditingController(text: widget.banner?.imageUrl);
   late final _linkId = TextEditingController(text: widget.banner?.linkId);
   late final _sort = TextEditingController(text: '${widget.banner?.sortOrder ?? 0}');
+  late String _imageUrl = widget.banner?.imageUrl ?? '';
   late String _linkType = widget.banner?.linkType ?? 'none';
   late bool _isActive = widget.banner?.isActive ?? true;
 
   @override
   void dispose() {
-    for (final c in [_title, _image, _linkId, _sort]) {
+    for (final c in [_title, _linkId, _sort]) {
       c.dispose();
     }
     super.dispose();
@@ -37,10 +42,16 @@ class _BannerFormDialogState extends State<BannerFormDialog> {
 
   Future<void> _save() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
+    if (_imageUrl.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please upload a banner image')),
+      );
+      return;
+    }
     final b = BannerItem(
       id: widget.banner?.id ?? '',
       title: _title.text.trim(),
-      imageUrl: _image.text.trim(),
+      imageUrl: _imageUrl,
       linkType: _linkType,
       linkId: _linkId.text.trim(),
       sortOrder: int.tryParse(_sort.text.trim()) ?? 0,
@@ -76,21 +87,10 @@ class _BannerFormDialogState extends State<BannerFormDialog> {
                   const SizedBox(height: 16),
                   AppTextField(label: context.l10n.title, controller: _title, validator: AppValidator.required),
                   const SizedBox(height: 12),
-                  AppTextField(
-                    label: context.l10n.imageUrl,
-                    controller: _image,
-                    validator: AppValidator.url,
-                    hint: 'https://…',
-                    onChanged: (_) => setState(() {}),
+                  _BannerImagePicker(
+                    imageUrl: _imageUrl,
+                    onChanged: (url) => setState(() => _imageUrl = url),
                   ),
-                  if (_image.text.trim().isNotEmpty &&
-                      Uri.tryParse(_image.text.trim())?.hasScheme == true) ...[
-                    const SizedBox(height: 10),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: AppNetworkImage(url: _image.text.trim(), height: 120),
-                    ),
-                  ],
                   const SizedBox(height: 12),
                   Text(context.l10n.linkType, style: AppTextStyles.label),
                   const SizedBox(height: 6),
@@ -137,6 +137,160 @@ class _BannerFormDialogState extends State<BannerFormDialog> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _BannerImagePicker extends StatefulWidget {
+  const _BannerImagePicker({required this.imageUrl, required this.onChanged});
+  final String imageUrl;
+  final ValueChanged<String> onChanged;
+
+  @override
+  State<_BannerImagePicker> createState() => _BannerImagePickerState();
+}
+
+class _BannerImagePickerState extends State<_BannerImagePicker> {
+  bool _uploading = false;
+
+  Future<void> _pick() async {
+    if (_uploading) return;
+    final completer = Completer<void>();
+    js.context.callMethod('gmgPickImages', [
+      js.allowInterop((String jsonStr) {
+        try {
+          final items = (jsonDecode(jsonStr) as List).cast<Map<String, dynamic>>();
+          final first = items.isNotEmpty ? items.first : null;
+          if (first != null && (first['dataUrl'] as String).isNotEmpty) {
+            _uploadFile(first)
+                .then((_) => completer.complete())
+                .catchError((_) => completer.complete());
+          } else {
+            completer.complete();
+          }
+        } catch (_) {
+          completer.complete();
+        }
+      }),
+    ]);
+    await completer.future;
+  }
+
+  Future<void> _uploadFile(Map<String, dynamic> file) async {
+    final dataUrl = file['dataUrl'] as String;
+    final bytes = base64Decode(dataUrl.split(',').last);
+    final name = file['name'] as String;
+    final ext = name.split('.').last.toLowerCase();
+    if (!['jpg', 'jpeg', 'png', 'webp', 'gif'].contains(ext)) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Invalid image type (jpg, png, webp, gif only)')),
+        );
+      }
+      return;
+    }
+    if (bytes.length > 5 * 1024 * 1024) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Image too large (max 5 MB)')),
+        );
+      }
+      return;
+    }
+    setState(() => _uploading = true);
+    try {
+      final storage = Supabase.instance.client.storage;
+      final path = 'banners/${DateTime.now().millisecondsSinceEpoch}_$name';
+      await storage.from('product-images').uploadBinary(
+        path,
+        bytes,
+        fileOptions: FileOptions(contentType: 'image/$ext', upsert: true),
+      );
+      final url = storage.from('product-images').getPublicUrl(path);
+      widget.onChanged(url);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Upload failed: $e')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _uploading = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Banner Image', style: AppTextStyles.label),
+        const SizedBox(height: 8),
+        if (widget.imageUrl.isNotEmpty) ...[
+          Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: CachedNetworkImage(
+                  imageUrl: widget.imageUrl,
+                  height: 110,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorWidget: (_, __, ___) => const Icon(Icons.broken_image_outlined),
+                ),
+              ),
+              Positioned(
+                top: 6,
+                right: 6,
+                child: GestureDetector(
+                  onTap: () => widget.onChanged(''),
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: AppColors.error,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.close, size: 14, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+        ],
+        InkWell(
+          onTap: _uploading ? null : _pick,
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.border),
+              borderRadius: BorderRadius.circular(10),
+              color: AppColors.scaffoldBg,
+            ),
+            child: Column(
+              children: [
+                if (_uploading)
+                  const SizedBox(
+                    width: 22,
+                    height: 22,
+                    child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primaryDark),
+                  )
+                else
+                  const Icon(Icons.cloud_upload_outlined, size: 26, color: AppColors.primaryDark),
+                const SizedBox(height: 6),
+                Text(
+                  _uploading
+                      ? 'Uploading…'
+                      : (widget.imageUrl.isNotEmpty ? 'Replace image' : 'Upload banner image'),
+                  style: AppTextStyles.label,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
