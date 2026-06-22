@@ -31,6 +31,8 @@ class OrdersCubit extends Cubit<OrdersState> {
     }
   }
 
+  Future<Order> getOrderById(String id) => _repository.getOrderById(id);
+
   Future<bool> updateStatus(Order order, OrderStatus status) async {
     try {
       await _repository.updateStatus(order.id, status);

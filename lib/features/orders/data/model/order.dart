@@ -50,6 +50,7 @@ class OrderItem extends Equatable {
   final double unitPrice;
   final int quantity;
   final double subtotal;
+  final String? imageUrl;
 
   const OrderItem({
     required this.name,
@@ -57,15 +58,26 @@ class OrderItem extends Equatable {
     required this.unitPrice,
     required this.quantity,
     required this.subtotal,
+    this.imageUrl,
   });
 
-  factory OrderItem.fromJson(Map<String, dynamic> j) => OrderItem(
-        name: j['name'] as String? ?? '',
-        variantName: j['variant_name'] as String?,
-        unitPrice: (j['unit_price'] as num?)?.toDouble() ?? 0,
-        quantity: j['quantity'] as int? ?? 1,
-        subtotal: (j['subtotal'] as num?)?.toDouble() ?? 0,
-      );
+  factory OrderItem.fromJson(Map<String, dynamic> j) {
+    // Try direct image_url field first, then fall back to joined products.images
+    String? imageUrl = j['image_url'] as String?;
+    if (imageUrl == null || imageUrl.isEmpty) {
+      final productData = j['products'] as Map<String, dynamic>?;
+      final images = (productData?['images'] as List<dynamic>?)?.cast<String>() ?? const <String>[];
+      if (images.isNotEmpty) imageUrl = images.first;
+    }
+    return OrderItem(
+      name: j['name'] as String? ?? '',
+      variantName: j['variant_name'] as String?,
+      unitPrice: (j['unit_price'] as num?)?.toDouble() ?? 0,
+      quantity: j['quantity'] as int? ?? 1,
+      subtotal: (j['subtotal'] as num?)?.toDouble() ?? 0,
+      imageUrl: imageUrl,
+    );
+  }
 
   @override
   List<Object?> get props => [name, variantName, quantity];

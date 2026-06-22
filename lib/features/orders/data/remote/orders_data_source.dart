@@ -6,6 +6,8 @@ class OrdersDataSource {
   OrdersDataSource(this._client);
 
   static const _select = '*, order_items(*)';
+  // Detail select joins products so we can show product images
+  static const _detailSelect = '*, order_items(*, products(id, images))';
 
   Stream<List<Order>> watchOrders() {
     return _client
@@ -21,7 +23,7 @@ class OrdersDataSource {
   }
 
   Future<Order> getOrderById(String id) async {
-    final row = await _client.from('orders').select(_select).eq('id', id).single();
+    final row = await _client.from('orders').select(_detailSelect).eq('id', id).single();
     return Order.fromJson(row);
   }
 
